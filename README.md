@@ -1,11 +1,19 @@
 App Property
 =========
 
+財產管理系統 -- 使用RoR
+
+原本是延伸CI版本之專案，但目前應只實做到可以使用功能為止
+
 This application was generated with the [rails_apps_composer](https://github.com/RailsApps/rails_apps_composer) gem
 provided by the [RailsApps Project](http://railsapps.github.io/).
 
 Diagnostics
 -----------
+
+本專案可使用Haml, SCSS, Coffee Script進行程式碼寫作
+
+目前置入BootStrap以進行版面設計
 
 This application was built with recipes that are known to work together.
 
@@ -78,7 +86,7 @@ Learn more about [Installing Rails](http://railsapps.github.io/installing-rails.
 Database
 --------
 
-This application uses SQLite with ActiveRecord.
+This application uses MySQL with ActiveRecord.
 
 Development
 -----------
