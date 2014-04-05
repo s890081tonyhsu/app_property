@@ -1,0 +1,11 @@
+%h1 中興大學學生會會產管理系統
+
+%h3 物品列表
+
+%p 以下物品是學生會可借用之物品，如果有需要可以在該物品右方按下借用
+
+.col-md-12
+  - @itemAll.each do |anItem| 
+    %p{:class => "span2"} 物品名稱：
+    %p{:class => "span2"}= anItem.ItemName
+    %p{:class => "span2"}= anItem.ItemStatus
