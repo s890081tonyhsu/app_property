@@ -1,0 +1,24 @@
+= render 'item/subnav'
+
+%p 你可以在此新增一個物品，但請務必先經過財務部認可
+
+.form-group
+  = form_for @itemNew, {"controller"=>"item", "action"=>"new_item"} do |f|
+    .field
+      = f.label :ItemName
+      = f.text_field :ItemName
+
+    .field
+      = f.label :ItemNum
+      = f.text_field :ItemNum
+
+    .field
+      = f.label :ItemHeavy
+      = f.text_field :ItemHeavy
+
+    .field
+      = f.label :ItemDescription
+      = f.text_field :ItemDescription
+
+    .field
+      = f.submit

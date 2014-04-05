@@ -1,0 +1,21 @@
+%h1 中興大學學生會會產管理系統
+
+%nav.navbar.navbar-inverse.navigation{:role => "navigation"}
+  .navbar-header
+    %button.navbar-toggle{:"data-toggle" => "collapse", :"data-target" => "#item-subnav"}
+      %span.sr-only
+      %span.icon-bar
+      %span.icon-bar
+      %span.icon-bar
+    = link_to '物品管理頁面', item_path('view'), class: 'navbar-brand'
+  
+  #item-subnav.collapse.navbar-collapse
+    %ul.nav.navbar-nav
+      %li
+        %a 新增物品
+      %li
+        %a 修改物品
+      %li 
+        %a 刪除物品
+      %li 
+        %a 物品列表

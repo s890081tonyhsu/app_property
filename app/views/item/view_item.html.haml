@@ -1,11 +1,22 @@
-%h1 中興大學學生會會產管理系統
-
-%h3 物品列表
+= render 'item/subnav'
 
 %p 以下物品是學生會可借用之物品，如果有需要可以在該物品右方按下借用
 
-.col-md-12
+- itemStatus = ["無法借用","可以借用","已進行審核","已被借用"]
+- statusClass = ["btn-danger", "btn-primary", "btn-warning", "btn-success"]
+%table.table.table-hover
+  %tr
+    %th 物品名稱
+    %th 物品說明
+    %th 目前借用狀態
   - @itemAll.each do |anItem| 
-    %p{:class => "span2"} 物品名稱：
-    %p{:class => "span2"}= anItem.ItemName
-    %p{:class => "span2"}= anItem.ItemStatus
+    %tr
+      %td
+        = link_to anItem.ItemName, :action => "show_item", :id => anItem.id
+        .btn-group.pull-right
+          = link_to button_tag("編輯", :class => "btn-success"), :action => "modify", :id => anItem.id
+          = link_to button_tag("刪除", :class => "btn-danger"), :action => "del", :id => anItem.id
+      %td
+        = anItem.ItemDescription
+      %td
+        %button{:class => ["btn", statusClass[anItem.ItemStatus], anItem.ItemStatus == 1? "":"disabled" ]}= itemStatus[anItem.ItemStatus]
