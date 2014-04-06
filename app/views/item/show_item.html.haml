@@ -2,8 +2,8 @@
 
 %p 此為該物品的詳細資訊
 
-- itemStatus = ["無法借用","可以借用","已進行審核","已被借用"]
-- statusClass = ["btn-danger", "btn-primary", "btn-warning", "btn-success"]
+- itemStatus = ["未開放借用","可以借用","已被借用"]
+- statusClass = ["btn-warning", "btn-success", "btn-danger"]
 - @HeavyContent = @itemData.ItemHeavy >= 5? "高價值會產，請向學生會會長或是財務部部長授權取得":"一般價值會產，請向學生會各級幹部知會取得"
 
 %strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 物品名稱
@@ -14,7 +14,7 @@
 %p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}
   %button{:class => ["col-md-4 col-md-offset-4", "btn", statusClass[@itemData.ItemStatus], @itemData.ItemStatus == 1? "":"disabled" ]}= itemStatus[@itemData.ItemStatus]
 %strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 物品說明
-%p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}= @itemShow.ItemDescription
+%p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}= @itemData.ItemDescription
 %strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 可借用時間長度
 %p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}
   = @itemData.ItemDeadline

@@ -7,15 +7,13 @@
       %span.icon-bar
       %span.icon-bar
       %span.icon-bar
-    = link_to '物品管理頁面', item_path('view'), class: 'navbar-brand'
+    = link_to '物品管理頁面', item_path, class: 'navbar-brand'
   
   #item-subnav.collapse.navbar-collapse
     %ul.nav.navbar-nav
       %li
-        %a 新增物品
+        = link_to '新增物品', item_path+'/new'
       %li
-        %a 修改物品
+        %a{:id => "edit-func"} 修改物品
       %li 
-        %a 刪除物品
-      %li 
-        %a 物品列表
+        %a{:id => "del-func"} 刪除物品
