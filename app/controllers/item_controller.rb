@@ -1,16 +1,24 @@
 class ItemController < ApplicationController
   def view_item
-    @itemAll = Item.all
+    @itemData = Item.all
   end
   def new_item
-    @itemNew = Item.new
+    @itemData = Item.new
   end
   def create_item
-    @itemCreate = Item.new(params[:item])
-	@itemCreate.save
+    @itemData = Item.new(item_params)
+    if @itemData.save 
+      render action: 'show_item', status: :created, location: @itemNew
+    else
+      render action: 'new_item' 
+    end
   end
   def show_item
     @itemId = params[:id]
-    @itemShow = Item.find(@itemId)
+    @itemData = Item.find(@itemId)
+  end
+
+  def item_params
+    params.require(:item).permit(:ItemName, :ItemNum, :ItemHeavy, :ItemStatus, :ItemDescription, :ItemDeadline)
   end
 end

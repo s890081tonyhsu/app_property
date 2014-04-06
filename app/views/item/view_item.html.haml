@@ -9,7 +9,7 @@
     %th 物品名稱
     %th 物品說明
     %th 目前借用狀態
-  - @itemAll.each do |anItem| 
+  - @itemData.each do |anItem| 
     %tr
       %td
         = link_to anItem.ItemName, :action => "show_item", :id => anItem.id
