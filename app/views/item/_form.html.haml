@@ -1,0 +1,32 @@
+    .form-group{:style => "padding-top:10px;"}
+      = label_tag '物品名稱', nil, class: 'col-sm-2 control-label'
+      .col-sm-2
+        = text_field_tag 'ItemName', nil, class: 'form-control'
+    .form-group
+      = label_tag '物品個數', nil, class: 'col-sm-2 control-label'
+      .col-sm-2
+        = number_field_tag 'ItemNum', nil, in: 1...11, class: 'form-control'
+      = label_tag '個', nil, class: 'col-sm-6', style: 'padding-top: 7px;'
+    .form-group
+      = label_tag '物品價值', nil, class: 'col-sm-2 control-label'
+      .col-sm-2
+        = number_field_tag 'ItemHeavy', nil, in: 1...11, class: 'form-control'
+    .form-group
+      = label_tag '物品狀態', nil, class: 'col-sm-2 control-label'
+      .col-sm-10.btn-group{:"data-toggle" => "buttons"}
+        - for i in 0..3
+          %label{:class => ['btn',statusClass[i]]}
+            = radio_button_tag 'ItemStatus', i
+            = itemStatus[i]
+    .form-group
+      = label_tag '物品說明', nil, class: 'col-sm-2 control-label'
+      .col-sm-10
+        = text_area_tag 'ItemName', nil, class: 'form-control'
+    .form-group
+      = label_tag '物品可借用天數', nil, class: 'col-sm-2 control-label'
+      .col-sm-2
+        = number_field_tag 'ItemHeavy', nil, in: 1...31, class: 'form-control'
+      = label_tag '天', nil, class: 'col-sm-6', style: 'padding-top: 7px;'
+    .form-group
+      .col-sm-offset-2.col-sm-8
+        = submit_tag 'Save', class: 'form-control'

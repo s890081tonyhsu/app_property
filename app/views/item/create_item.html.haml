@@ -1,0 +1,25 @@
+= render 'item/subnav'
+
+%p 建立成功
+
+%p 此為該物品的詳細資訊
+
+- itemStatus = ["未開放借用","可以借用","已被借用"]
+- statusClass = ["btn-warning", "btn-success", "btn-danger"]
+- @HeavyContent = @itemData.ItemHeavy >= 5? "高價值會產，請向學生會會長或是財務部部長授權取得":"一般價值會產，請向學生會各級幹部知會取得"
+
+%strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 物品名稱
+%p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}= @itemData.ItemName
+%strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 物品價值
+%p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}= @HeavyContent
+%strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 物品狀態
+%p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}
+  %button{:class => ["col-md-4 col-md-offset-4", "btn", statusClass[@itemData.ItemStatus], @itemData.ItemStatus == 1? "":"disabled" ]}= itemStatus[@itemData.ItemStatus]
+%strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 物品說明
+%p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}= @itemData.ItemDescription
+%strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 可借用時間長度
+%p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}
+  = @itemData.ItemDeadline
+  %span 天
+.col-md-12.text-center
+  = link_to button_tag('回到物品列表', :class => "btn btn-primary"), item_path+'/view', class: 'text-center'

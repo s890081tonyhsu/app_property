@@ -1,0 +1,5 @@
+- itemStatus = ["未開放借用","可以借用","已被借用"]
+- statusClass = ["btn-warning", "btn-success", "btn-danger"]
+- heavyContent = ["高價值會產，請向學生會會長或是財務部部長授權取得","一般價值會產，請向學生會各級幹部知會取得"]
+
+= %button{:class => ["btn", statusClass[data], data == 1? "":"disabled" ]}= itemStatus[data]

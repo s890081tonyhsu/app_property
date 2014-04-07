@@ -2,8 +2,9 @@
 
 %p 以下物品是學生會可借用之物品，如果有需要可以在該物品右方按下借用
 
-- itemStatus = ["無法借用","可以借用","已進行審核","已被借用"]
-- statusClass = ["btn-danger", "btn-primary", "btn-warning", "btn-success"]
+- itemStatus = ["未開放借用","可以借用","已被借用"]
+- statusClass = ["btn-warning", "btn-success", "btn-danger"]
+
 %table.table.table-hover
   %tr
     %th 物品名稱
@@ -14,8 +15,8 @@
       %td
         = link_to anItem.ItemName, :action => "show_item", :id => anItem.id
         .btn-group.pull-right
-          = link_to button_tag("編輯", :class => "btn-success"), :action => "modify", :id => anItem.id
-          = link_to button_tag("刪除", :class => "btn-danger"), :action => "del", :id => anItem.id
+          = link_to button_tag("編輯", :class => "btn-success edit-btn"), :action => "modify_item", :id => anItem.id
+          = link_to button_tag("刪除", :class => "btn-danger del-btn"), :action => "delete_item", :id => anItem.id
       %td
         = anItem.ItemDescription
       %td

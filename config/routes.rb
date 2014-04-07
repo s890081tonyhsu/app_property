@@ -5,11 +5,12 @@ AppProperty::Application.routes.draw do
   get "item" => "item#view_item"
   get "item/view" => "item#view_item"
   get "item/new" => "item#new_item"
-  get "item/modify/:id" => "item#modify"
-  get "item/del/:id" => "item#del"
+  get "item/modify_item/:id" => "item#modify_item"
+  get "item/delete_item/:id" => "item#delete_item"
 
-  post "item/create_item"
+  post "item/create_item" => "item#create_item"
+  post "item/update_item/:id" => "item#update_item"
   get "item/:id" => "item#show_item"
-  put "item/updating/:id" => "item#updating"
-  put "item/destroying/:id" => "item#destroying"
+  put "item/update_item/:id" => "item#update_item"
+  put "item/delete_item/:id" => "item#delete_item"
 end
