@@ -1,0 +1,25 @@
+= render "lend/subnav"
+
+%p 以下清單為借用列表
+
+- lendStatus = ["不予准許","正在借用","審核中","違規過期"]
+- statusClass = ["btn-danger", "btn-success", "btn-warning", "btn-danger"]
+
+%table.table.table-hover
+  %tr
+    %th 借閱人姓名
+    %th 借閱物品
+    %th 批准狀態
+    %th 申請表單日期
+  - @lendData.each do |anLend|
+    %tr
+      %td
+        = anLend.LendName
+        .pull-right
+          = link_to "詳細資訊", :action => "show_lend", :id => anLend.id
+      %td
+        = link_to Item.find(anLend.ItemId).ItemName, item_path+"/"+@itemData.find(anLend.ItemId).id.to_s
+      %td
+        %button{:class => ["btn", statusClass[anLend.ItemLendStatus]]}= lendStatus[anLend.ItemLendStatus]
+      %td
+        = anLend.created_at

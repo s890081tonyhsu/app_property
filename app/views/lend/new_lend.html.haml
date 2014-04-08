@@ -1,0 +1,32 @@
+= render 'lend/subnav'
+
+- itemStatus = ["未開放借用","可以借用"]
+- statusClass = ["btn-warning", "btn-success"]
+
+%p 你可以在此新增借閱許可
+
+.form-horizontal{:role => "form"}
+  = form_for @lendData, :url => { :action => "create_lend" } do |form|
+    .form-group{:style => "padding-top:10px;"}
+      = label(:lendNew, :LendName, "借用人姓名", class: "col-sm-2 control-label")
+      .col-sm-2
+        = form.text_field :LendName, class: 'form-control'
+    .form-group{:style => "padding-top:10px;"}
+      = label(:lendNew, :LendEmail, "借用人電子郵件", class: "col-sm-2 control-label")
+      .col-sm-4
+        = form.text_field :LendEmail, class: 'form-control'
+    .form-group
+      = label(:lendNew, :ItemNum, "借用物品", class: "col-sm-2 control-label")
+      #itemSelect.col-sm-2
+        = form.select :ItemId, Item.all.collect {|p| [ p.ItemName, p.id,{:"data-deadline" => p.ItemDeadline} ] }, { include_blank: true }, class: "selectpicker form-control", :"data-live-search" => "true", :onchange => "ItemDeadline()"
+      #date_notice.col-sm-2.text-warning.control-label{:style =>"display:none;"}
+        注意：此物品可供借用
+        %span
+        天
+    .form-group
+      = label(:lendNew, :PassTime, "預定借用日期", class: "col-sm-2 control-label")
+      .col-sm-2
+        = form.date_field :PassTime, class: 'form-control'
+    .form-group
+      .col-sm-offset-2.col-sm-8
+        = submit_tag 'Save', class: 'form-control'
