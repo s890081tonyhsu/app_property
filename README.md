@@ -1,7 +1,7 @@
 App Property
 =========
 
-財產管理系統 -- 使用RoR
+會產管理系統 -- 使用RoR
 
 原本是延伸CI版本之專案，但目前應只實做到可以使用功能為止
 
@@ -101,6 +101,8 @@ Development
 
 Email
 -----
+
+這功能尚未設定完全，因為拔除了SQLite資料庫
 
 The application is configured to send email using a Gmail account.
 
