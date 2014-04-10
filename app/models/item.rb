@@ -5,4 +5,6 @@ class Item < ActiveRecord::Base
   validates_length_of :ItemName, :in => 1..32
   # 物品數量至少一個
   validates_numericality_of :ItemNum, :greater_than => 0
+  # 確保該物品為唯一
+  validates_uniqueness_of :ItemName
 end
