@@ -8,3 +8,9 @@ root.ItemDeadline = () ->
   if attr
     $('#date_notice').fadeIn()
     $('#date_notice span').text(attr)
+
+$('#edit-func').click ->
+  $('.edit-btn').fadeToggle()
+$('#del-func').click ->
+  $('.del-btn').fadeToggle()
+
