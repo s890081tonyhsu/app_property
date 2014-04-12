@@ -36,6 +36,28 @@ class LendController < ApplicationController
       flash[:error] = "儲存失敗，請查看欄位是否有誤"
     end	  
   end
+  def modify_lend
+    @itemId = params[:id]
+    @itemData = Item.find(@itemId)
+  end
+  def update_lend
+    @lendId = params[:id]
+    @lendData = Lend.find(@lendId)
+    if @lendData.update_attributes(lend_params)
+      redirect_to :action => 'show_lend'
+	  flash[:notice] = "儲存成功，以下是你的欄位資訊"
+    else
+	  render 'edit_lend'
+      flash[:error] = "儲存失敗，請查看欄位是否有誤"
+    end
+  end
+
+  def delete_item
+    @lendData = Lend.find(params[:id])
+	@lendData.destroy
+	redirect_to :action => 'view_lend'
+  end
+
   def lend_params
     params.require(:lend).permit(:LendName, :LendEmail, :ItemId, :ItemLendStatus, :PassTime)
   end
