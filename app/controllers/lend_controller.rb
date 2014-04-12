@@ -17,9 +17,11 @@ class LendController < ApplicationController
 	@itemData = Item
   end
 
-  def new_lend
+  def new_lend 
     @lendData = Lend.new
-    @itemData = Item.new
+    if params.has_key?(:id)
+      @lendData.ItemId = params[:id]
+	end
   end
   def create_lend
     @itemData = Item

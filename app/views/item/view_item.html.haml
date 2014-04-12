@@ -20,4 +20,4 @@
       %td
         = anItem.ItemDescription
       %td
-        %button{:class => ["btn", statusClass[anItem.ItemStatus], anItem.ItemStatus == 1? "":"disabled" ]}= itemStatus[anItem.ItemStatus]
+        = link_to button_tag(itemStatus[anItem.ItemStatus], :class => ["btn", statusClass[anItem.ItemStatus], anItem.ItemStatus == 1? "":"disabled" ]), lend_path+"/new/"+anItem.id.to_s

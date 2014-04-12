@@ -20,6 +20,7 @@ AppProperty::Application.routes.draw do
   get "lend" => "lend#view_lend"
   get "lend/view" => "lend#view_lend"
   get "lend/new" => "lend#new_lend"
+  get "lend/new/:id" => "lend#new_lend"
   get "lend/:id" => "lend#show_lend"
   get "lend/modify_lend/:id" => "lend#modify_lend"
   get "lend/delete_lend/:id" => "lend#delete_lend"

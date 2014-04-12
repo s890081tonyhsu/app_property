@@ -14,13 +14,13 @@
   - @lendData.each do |anLend|
     %tr
       %td
-        = link_to anLend.LendName, :action => "show_lend", :id => anLend.id
+        = anLend.LendName
         .btn-group.pull-right
           = link_to button_tag("編輯", :class => "btn-success edit-btn"), :action => "modify_lend", :id => anLend.id
           = link_to button_tag("刪除", :class => "btn-danger del-btn"), :action => "delete_lend", :id => anLend.id
       %td
         = link_to Item.find(anLend.ItemId).ItemName, item_path+"/"+@itemData.find(anLend.ItemId).id.to_s
       %td
-        %button{:class => ["btn", statusClass[anLend.ItemLendStatus]]}= lendStatus[anLend.ItemLendStatus]
+        = link_to button_tag(lendStatus[anLend.ItemLendStatus], :class => ["btn", statusClass[anLend.ItemLendStatus]]), :action => "show_lend", :id => anLend.id
       %td
         = anLend.created_at
