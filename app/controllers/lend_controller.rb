@@ -32,25 +32,29 @@ class LendController < ApplicationController
 	@lendData.ItemLendStatus = 2
     if @lendData.save
       render 'show_lend'
-	  flash[:notice] = "儲存成功，以下是你的欄位資訊"
+	  flash[:notice] = "儲存成功"
     else
 	  render 'new_lend'
-      flash[:error] = "儲存失敗，請查看欄位是否有誤"
+      flash[:error] = "儲存失敗"
     end	  
   end
   def modify_lend
-    @itemId = params[:id]
-    @itemData = Item.find(@itemId)
+    @lendId = params[:id]
+    @lendData = Lend.find(@lendId)
   end
   def update_lend
     @lendId = params[:id]
     @lendData = Lend.find(@lendId)
-    if @lendData.update_attributes(lend_params)
-      redirect_to :action => 'show_lend'
-	  flash[:notice] = "儲存成功，以下是你的欄位資訊"
+    @itemId = @lendData.ItemId
+	@itemTime = Item.find(@itemId).ItemDeadline
+	@lendData.DeadTime = (@lendData.PassTime.to_date + @itemTime).iso8601
+	@lendData.ItemLendStatus = 2
+    if @lendData.save
+      render 'show_lend'
+	  flash[:notice] = "儲存成功"
     else
-	  render 'edit_lend'
-      flash[:error] = "儲存失敗，請查看欄位是否有誤"
+	  render 'new_lend'
+      flash[:error] = "儲存失敗"
     end
   end
 
