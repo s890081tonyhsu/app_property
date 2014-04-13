@@ -9,10 +9,10 @@ class ItemController < ApplicationController
     @itemData = Item.new(item_params)
     if @itemData.save
       render 'show_item'
-	  flash[:notice] = "儲存成功，以下是你的欄位資訊"
+	  flash[:notice] = "儲存成功"
     else
 	  render 'new_item'
-      flash[:error] = "儲存失敗，請查看欄位是否有誤"
+      flash[:error] = "儲存失敗"
     end	  
   end
 
@@ -24,11 +24,11 @@ class ItemController < ApplicationController
     @itemId = params[:id]
     @itemData = Item.find(@itemId)
     if @itemData.update_attributes(item_params)
-      redirect_to :action => 'show_item'
-	  flash[:notice] = "儲存成功，以下是你的欄位資訊"
+      render 'show_item'
+	  flash[:notice] = "儲存成功"
     else
 	  render 'edit_item'
-      flash[:error] = "儲存失敗，請查看欄位是否有誤"
+      flash[:error] = "儲存失敗"
     end
   end
 
