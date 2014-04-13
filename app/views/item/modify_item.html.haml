@@ -8,37 +8,67 @@
 %p 你可以在此修改一個物品，但請務必先經過財務部認可
 
 .form-horizontal{:role => "form"}
-  = form_for @itemData, :url => { :action => "update_item" }, :method => :POST do |form|
-    .form-group{:style => "padding-top:10px;"}
+  = form_for @itemData, :url => { :action => "create_item" } do |form|
+    - @nameError = @itemData.errors[:ItemName].any? ? 1:0
+    .form-group{:style => "padding-top:10px;", :class => @nameError == 1 ? "has-error":"has-success"}
       = label(:itemNew, :ItemName, "物品名稱", class: "col-sm-2 control-label")
       .col-sm-2
         = form.text_field :ItemName, class: 'form-control'
-    .form-group
+      - if @itemData.errors[:ItemName].any?
+        .col-sm-4.has-error
+          - @itemData.errors[:ItemName].each do |detail|
+            = label(:itemNew, :ItemName, detail, class: "control-label")
+    - @numError = @itemData.errors[:ItemNum].any? ? 1:0
+    .form-group{:class => @numError == 1 ? "has-error":"has-success"}
       = label(:itemNew, :ItemNum, "物品個數", class: "col-sm-2 control-label")
       .col-sm-2
         = form.number_field :ItemNum, class: 'form-control'
-      = label(:itemNew, :ItemNum, "個", class: "col-sm-6", style: "padding-top: 7px;")
-    .form-group
+      = label(:itemNew, :ItemNum, "個", class: "col-sm-2", style: "padding-top: 7px;")
+      - if @itemData.errors[:ItemNum].any?
+        .col-sm-4.has-error
+          - @itemData.errors[:ItemNum].each do |detail|
+            = label(:itemNew, :ItemNum, detail, class: "control-label")
+    - @heavyError = @itemData.errors[:ItemHeavy].any? ? 1:0
+    .form-group{:class => @heavyError == 1 ? "has-error":"has-success"}
       = label(:itemNew, :ItemHeavy, "物品價值", class: "col-sm-2 control-label")
       .col-sm-2
         = form.number_field :ItemHeavy, class: 'form-control'
-    .form-group
+      - if @itemData.errors[:ItemHeavy].any?
+        .col-sm-4.has-error
+          - @itemData.errors[:ItemHeavy].each do |detail|
+            = label(:itemNew, :ItemHeavy, detail, class: "control-label")
+    - @statusError = @itemData.errors[:ItemStatus].any? ? 1:0
+    .form-group{:class => @statusError == 1 ? "has-error":"has-success"}
       = label(:itemNew, :ItemStatus, "物品狀態", class: "col-sm-2 control-label")
-      .col-sm-10.btn-group{:"data-toggle" => "buttons"}
-        - for i in 0..2
-          %label{:class => ['btn',statusClass[i], activeStatus[i]]}
+      .col-sm-2.btn-group{:"data-toggle" => "buttons"}
+        - for i in 0..1
+          %label{:class => ['btn',statusClass[i], @itemData.ItemStatus == i ? "active":""]}
             = form.radio_button :ItemStatus, i
             = itemStatus[i]
-    .form-group
+      - if @itemData.errors[:ItemHeavy].any?
+        .col-sm-4.has-error
+          - @itemData.errors[:ItemStatus].each do |detail|
+            = label(:itemNew, :ItemStatus, detail, class: "control-label")
+    - @descriptionError = @itemData.errors[:ItemDescription].any? ? 1:0
+    .form-group{:class => @descriptionError == 1 ? "has-error":"has-success"}
       = label(:itemNew, :ItemDescription, "物品說明", class: "col-sm-2 control-label")
-      .col-sm-10
+      .col-sm-4
         = form.text_area :ItemDescription, class: 'form-control'
-    .form-group
+      - if @itemData.errors[:ItemDescription].any?
+        .col-sm-2.has-error
+          - @itemData.errors[:ItemDescription].each do |detail|
+            = label(:itemNew, :ItemDescription, detail, class: "control-label")
+    - @deadlineError = @itemData.errors[:ItemDeadline].any? ? 1:0
+    .form-group{:class => @deadlineError == 1 ? "has-error":"has-success"}
       = label(:itemNew, :ItemDeadline, "物品可借用天數", class: "col-sm-2 control-label")
       .col-sm-2
         = form.number_field :ItemDeadline, class: 'form-control'
-      = label_tag '天', nil, class: 'col-sm-6', style: 'padding-top: 7px;'
+      = label_tag '天', nil, class: 'col-sm-2', style: 'padding-top: 7px;'
+      - if @itemData.errors[:ItemDeadline].any?
+        .col-sm-4.has-error
+          - @itemData.errors[:ItemDeadline].each do |detail|
+            = label(:itemNew, :ItemDeadline, detail, class: "control-label")
+    - @deadlineError = @itemData.errors[:ItemDeadline].any? ? 1:0
     .form-group
       .col-sm-offset-2.col-sm-8
         = submit_tag 'Save', class: 'form-control'
-
