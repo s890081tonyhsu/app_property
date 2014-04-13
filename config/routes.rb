@@ -1,6 +1,7 @@
 AppProperty::Application.routes.draw do
   resources :contacts, only: [:new, :create]
   resources :visitors, only: [:new, :create]
+  resources :test
   root to: 'visitors#new'
 
   # Item CRUD
@@ -12,7 +13,7 @@ AppProperty::Application.routes.draw do
   get "item/delete_item/:id" => "item#delete_item"
 
   post "item/create_item" => "item#create_item"
-  post "item/update_item/:id" => "item#update_item"
+  patch "item/update_item/:id" => "item#update_item"
   put "item/update_item/:id" => "item#update_item"
   put "item/delete_item/:id" => "item#delete_item"
 
@@ -26,7 +27,7 @@ AppProperty::Application.routes.draw do
   get "lend/delete_lend/:id" => "lend#delete_lend"
 
   post "lend/create_lend" => "lend#create_lend"
-  post "lend/update_lend/:id" => "lend#update_lend"
+  patch "lend/update_lend/:id" => "lend#update_lend"
   put "lend/update_lend/:id" => "lend#update_lend"
   put "lend/delete_lend/:id" => "lend#delete_lend"
 
