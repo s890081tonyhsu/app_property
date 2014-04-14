@@ -12,8 +12,8 @@
   #lend-subnav.collapse.navbar-collapse
     %ul.nav.navbar-nav
       %li
-        = link_to '新增物品', lend_path+'/new'
+        = link_to '新增借閱', lend_path+'/new'
       %li
-        %a{:id => "edit-func"} 修改物品
+        = link_to '管理借閱', lend_path+'/verify'
       %li 
-        %a{:id => "del-func"} 刪除物品
+        %a{:id => "del-func"} 審核借閱

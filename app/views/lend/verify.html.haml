@@ -1,0 +1,43 @@
+= render "lend/subnav"
+
+- lendStatus = ["不予准許","正在借用","審核中","違規過期"]
+- statusClass = ["btn-danger", "btn-success", "btn-warning", "btn-danger"]
+
+%p 請輸入你的姓名和電子郵件，以便取得你的借閱資訊
+
+.form-horizontal{:role => 'form'}
+  = form_tag lend_path+'/verify' do
+    .form-group
+      = label_tag 'name', '借用人姓名', class: 'col-sm-2 control-label'
+      .col-sm-2
+        = text_field_tag 'name', nil, class: 'form-control'
+    .form-group
+      = label_tag 'email', "借用人電子郵件", class: 'col-sm-2 control-label'
+      .col-sm-4
+        = text_field_tag 'email', nil, class: 'form-control'
+    .form-group
+      .col-sm-offset-2.col-sm-8
+        = submit_tag 'Save', class: 'form-control'
+
+- if @name.blank? && @email.blank?
+  = content_tag("目前沒有資料")
+- else
+  %table.table.table-hover
+    %tr
+      %th 借閱人姓名
+      %th 借閱物品
+      %th 批准狀態
+      %th 申請表單日期
+    - @lendData.each do |anLend|
+      %tr
+        %td
+          = anLend.LendName
+        %td
+          - if Item.where(:id => anLend.ItemId).blank?
+            = content_tag("該物品已被刪除")
+          - else
+            = link_to Item.find(anLend.ItemId).ItemName, item_path+"/"+@itemData.find(anLend.ItemId).id.to_s
+        %td
+          = link_to button_tag(lendStatus[anLend.ItemLendStatus], :class => ["btn", statusClass[anLend.ItemLendStatus]]), :action => "show_lend", :id => anLend.id
+        %td
+          = anLend.created_at

@@ -58,12 +58,27 @@ class LendController < ApplicationController
     end
   end
 
-  def delete_item
+  def delete_lend
     @lendData = Lend.find(params[:id])
 	@lendData.destroy
 	redirect_to :action => 'view_lend'
   end
-
+  
+  def verify
+    @itemData = Item
+    if params.has_key?(:name) && params.has_key?(:email)
+		@name = params[:name]
+		@email = params[:email]
+		@lendData = Lend.where("LendName = ? AND LendEmail = ?", @name, @email)
+    else
+		@name = ""
+		@email = ""
+    end
+  end
+  
+  def verify_params
+    
+  end
   def lend_params
     params.require(:lend).permit(:LendName, :LendEmail, :ItemId, :ItemLendStatus, :PassTime)
   end
