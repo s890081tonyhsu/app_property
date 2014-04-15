@@ -43,6 +43,7 @@ class LendController < ApplicationController
     @lendData = Lend.find(@lendId)
   end
   def update_lend
+	@itemData = Item 
     @lendId = params[:id]
     @lendData = Lend.find(@lendId)
     @itemId = @lendData.ItemId
@@ -75,10 +76,43 @@ class LendController < ApplicationController
 		@email = ""
     end
   end
-  
-  def verify_params
-    
+ 
+  def audit
+    @error = Array.new
+    @itemData = Item
+    if params.has_key?(:audit)
+      @data = params[:audit]
+      @data.keys.each do |id|
+        @editLend = Lend.find(id)
+        if Item.where(:id => @editLend.ItemId).blank?
+		  nil
+        else			
+          @editItem = Item.find(@editLend.ItemId)
+		end
+		case @data[id]
+        when 'pass'
+          if Item.where(:id => @editLend.ItemId).blank?
+            @error.push(@editLend.LendName + "的借用物品已被刪除")
+			next
+          end
+          if @editItem.ItemStatus == 1
+            @editLend.ItemLendStatus = 1
+            @editItem.ItemStatus = 2
+			@editItem.save
+          else
+            @error.push(@editItem.ItemName + "目前無法借用，請重新審核" + @editLend.LendName + "的借用表單")
+          end
+        when 'reject'
+          @editLend.ItemLendStatus = 0
+        when 'default'
+          nil
+        end
+		@editLend.save
+      end
+    end
+    @lendData = Lend.where("ItemLendStatus = ?",2)
   end
+
   def lend_params
     params.require(:lend).permit(:LendName, :LendEmail, :ItemId, :ItemLendStatus, :PassTime)
   end

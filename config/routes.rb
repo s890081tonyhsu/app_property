@@ -24,6 +24,8 @@ AppProperty::Application.routes.draw do
   get "lend/new/:id" => "lend#new_lend"
   get "lend/verify" => "lend#verify"
   post "lend/verify" => "lend#verify"
+  get "lend/audit" => "lend#audit"
+  post "lend/audit" => "lend#audit"
   get "lend/:id" => "lend#show_lend"
   get "lend/modify_lend/:id" => "lend#modify_lend"
   get "lend/delete_lend/:id" => "lend#delete_lend"
