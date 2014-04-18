@@ -1,0 +1,12 @@
+# Add your own tasks in files placed in lib/tasks ending in .rake,
+# for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
+
+require File.expand_path('../config/application', __FILE__)
+
+AppProperty::Application.load_tasks
+
+# rails -p can set the port if you use custom port
+task :server do
+  `bundle exec rails s -p 3000`
+end
+# run server by command 'rake server'
