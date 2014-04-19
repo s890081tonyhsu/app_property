@@ -8,7 +8,7 @@
 %p 你可以在此修改一個物品，但請務必先經過財務部認可
 
 .form-horizontal{:role => "form"}
-  = form_for @itemData, :url => { :action => "create_item" } do |form|
+  = form_for @itemData, :url => { :action => "update_item" } do |form|
     - @nameError = @itemData.errors[:ItemName].any? ? 1:0
     .form-group{:style => "padding-top:10px;", :class => @nameError == 1 ? "has-error":"has-success"}
       = label(:itemNew, :ItemName, "物品名稱", class: "col-sm-2 control-label")

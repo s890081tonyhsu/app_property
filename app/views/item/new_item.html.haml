@@ -28,7 +28,7 @@
             = label(:itemNew, :ItemNum, detail, class: "control-label")
     - @heavyError = @itemData.errors[:ItemHeavy].any? ? 1:0
     .form-group{:class => @heavyError == 1 ? "has-error":"has-success"}
-      = label(:itemNew, :ItemHeavy, "物品價值", class: "col-sm-2 control-label")
+      = label(:itemNew, :ItemHeavy, "物品權重", class: "col-sm-2 control-label")
       .col-sm-2
         = form.number_field :ItemHeavy, class: 'form-control'
       - if @itemData.errors[:ItemHeavy].any?
