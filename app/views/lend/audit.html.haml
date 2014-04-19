@@ -3,18 +3,43 @@
 - lendStatus = ["不予准許","正在借用","審核中","違規過期"]
 - statusClass = ["btn-danger", "btn-success", "btn-warning", "btn-danger"]
 
+.row
+  .col-md-12
+    %h4 便利審核方法：
+    %p 可用分類按鈕選出清單，以便進行審核
+    .form-group.pull-right
+      %label.control-label 分類按鈕：
+      #sort_audit.btn-group
+        - for i in 0..2
+          %button{:class => ["btn", statusClass[i], "active"], :statusval => i}
+            = lendStatus[i]
+  .col-md-12
+    - if @error.blank?
+      - if @success == 1
+        .alert.alert-success
+          %a.close{:href => "#", :"data-dismiss" => "alert"} &times;
+          = "審核已付諸執行"
+      - else
+        - nil
+    - else
+      - @error.each do |text|
+        .alert.alert-danger.alert-error
+          %a.close{:href => "#", :"data-dismiss" => "alert"} &times;
+          = text
+
 .form-horizontal{:role => 'form'}
   = form_tag lend_path+'/audit' do
     %table.table.table-hover
       %tr
-        %th 借閱人姓名
+        %th 借閱人姓名 @借閱單位
         %th 借閱物品
         %th 批准狀態
         %th 申請表單日期
       - @lendData.each do |anLend|
-        %tr
+        %tr{:class => "ItemLendStatus_" + anLend.ItemLendStatus.to_s}
           %td
-            = anLend.LendName 
+            = anLend.LendName
+            = '@' + anLend.LendUnit
           %td
             - if Item.where(:id => anLend.ItemId).blank?
               = content_tag("該物品已被刪除")
@@ -23,13 +48,15 @@
           %td
             .text-center
               = link_to button_tag(lendStatus[anLend.ItemLendStatus], :class => ["btn", statusClass[anLend.ItemLendStatus]]), :action => "show_lend", :id => anLend.id
-            .well.switch.switch-3
-              = radio_button_tag 'audit' + '[' + anLend.id.to_s + ']', 'default', true 
+            .well.switch{:class => anLend.ItemLendStatus == 2? "switch-3":""}
+              = radio_button_tag 'audit' + '[' + anLend.id.to_s + ']', 'default', true
               = label_tag 'audit[' + anLend.id.to_s + ']_default', '未決定', onclick: "", class: "col-ms-12"
-              = radio_button_tag 'audit' + '[' + anLend.id.to_s + ']', 'pass'
-              = label_tag 'audit[' + anLend.id.to_s + ']_pass', '通過', onclick: "", class: "col-ms-12"
-              = radio_button_tag 'audit' + '[' + anLend.id.to_s + ']', 'reject'
-              = label_tag 'audit[' + anLend.id.to_s + ']_reject', '回絕', onclick: "", class: "col-ms-12"
+              - if anLend.ItemLendStatus != 1
+                = radio_button_tag 'audit' + '[' + anLend.id.to_s + ']', 'pass'
+                = label_tag 'audit[' + anLend.id.to_s + ']_pass', '通過', onclick: "", class: "col-ms-12"
+              - if anLend.ItemLendStatus != 0
+                = radio_button_tag 'audit' + '[' + anLend.id.to_s + ']', 'reject'
+                = label_tag 'audit[' + anLend.id.to_s + ']_reject', '回絕', onclick: "", class: "col-ms-12"
               %span.slide-button.btn.btn-info
           %td
             = anLend.created_at
@@ -37,13 +64,4 @@
       .col-sm-offset-2.col-sm-8
         = submit_tag 'Save', class: 'form-control'
 
-.col-sm-12
-  - if @error.blank?
-    .alert.alert-success
-      %a.close{:href => "#", :"data-dismiss" => "alert"} &times;
-      = "審核已付諸執行"
-  - else
-    - @error.each do |text|
-      .alert.alert-danger.alert-error
-        %a.close{:href => "#", :"data-dismiss" => "alert"} &times;
-        = text
+

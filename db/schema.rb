@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140410110332) do
+ActiveRecord::Schema.define(version: 20140419083021) do
 
   create_table "items", force: true do |t|
     t.string   "ItemName"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 20140410110332) do
     t.date     "DeadTime"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "LendUnit"
   end
 
   add_index "lends", ["ItemId", "LendName"], name: "index_Lends_on_ItemId_and_LendName", unique: true, using: :btree

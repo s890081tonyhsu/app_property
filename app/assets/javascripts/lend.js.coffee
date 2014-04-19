@@ -1,6 +1,19 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
+sort_audit = ->
+  $('#sort_audit button').click ->
+    status = $(this).attr('statusval')
+    console.log status
+    if $(this).is('.active')
+      $('.ItemLendStatus_'+status).fadeOut()
+      $(this).removeClass('active')
+    else
+      $('.ItemLendStatus_'+status).fadeIn()
+      $(this).addClass('active')
+
+$(document).on('page:load', sort_audit)
+
 root = exports ? this
 root.ItemDeadline = () ->
   $('#date_notice').fadeOut()
@@ -8,9 +21,4 @@ root.ItemDeadline = () ->
   if attr
     $('#date_notice').fadeIn()
     $('#date_notice span').text(attr)
-
-$('#edit-func').click ->
-  $('.edit-btn').fadeToggle()
-$('#del-func').click ->
-  $('.del-btn').fadeToggle()
 

@@ -7,7 +7,7 @@
 
 %table.table.table-hover
   %tr
-    %th 借閱人姓名
+    %th 借閱人姓名 @借閱單位
     %th 借閱物品
     %th 批准狀態
     %th 申請表單日期
@@ -15,11 +15,12 @@
     %tr
       %td
         = anLend.LendName
-        .btn-group.pull-right
-          = link_to button_tag("編輯", :class => "btn-success edit-btn"), :action => "modify_lend", :id => anLend.id
-          = link_to button_tag("刪除", :class => "btn-danger del-btn"), :action => "delete_lend", :id => anLend.id
+        = '@' + anLend.LendUnit
       %td
-        = link_to Item.find(anLend.ItemId).ItemName, item_path+"/"+@itemData.find(anLend.ItemId).id.to_s
+        - if Item.where(:id => anLend.ItemId).blank?
+          = content_tag("該物品已被刪除")
+        - else
+          = link_to Item.find(anLend.ItemId).ItemName, item_path+"/"+@itemData.find(anLend.ItemId).id.to_s
       %td
         = link_to button_tag(lendStatus[anLend.ItemLendStatus], :class => ["btn", statusClass[anLend.ItemLendStatus]]), :action => "show_lend", :id => anLend.id
       %td

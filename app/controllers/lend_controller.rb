@@ -26,17 +26,20 @@ class LendController < ApplicationController
   def create_lend
     @itemData = Item
     @lendData = Lend.new(lend_params)
-    @itemId = @lendData.ItemId
-	@itemTime = Item.find(@itemId).ItemDeadline
-	@lendData.DeadTime = (@lendData.PassTime.to_date + @itemTime).iso8601
-	@lendData.ItemLendStatus = 2
-    if @lendData.save
+    begin
+      @itemId = @lendData.ItemId
+      @itemTime = Item.find(@itemId).ItemDeadline
+      @lendData.DeadTime = (@lendData.PassTime.to_date + @itemTime).iso8601
+      @lendData.ItemLendStatus = 2
+      @lendData.save
       render 'show_lend'
-	  flash[:notice] = "儲存成功"
-    else
-	  render 'new_lend'
-      flash[:error] = "儲存失敗"
-    end	  
+  	  flash[:notice] = "儲存成功"
+	rescue
+      if @lendData.save == false
+  	    render 'new_lend'
+        flash[:error] = "儲存失敗"
+      end
+	end	  
   end
   def modify_lend
     @lendId = params[:id]
@@ -45,17 +48,20 @@ class LendController < ApplicationController
   def update_lend
 	@itemData = Item 
     @lendId = params[:id]
-    @lendData = Lend.find(@lendId)
-    @itemId = @lendData.ItemId
-	@itemTime = Item.find(@itemId).ItemDeadline
-	@lendData.DeadTime = (@lendData.PassTime.to_date + @itemTime).iso8601
-	@lendData.ItemLendStatus = 2
-    if @lendData.save
+	begin
+      @lendData = Lend.find(@lendId)
+      @itemId = @lendData.ItemId
+	  @itemTime = Item.find(@itemId).ItemDeadline
+	  @lendData.DeadTime = (@lendData.PassTime.to_date + @itemTime).iso8601
+	  @lendData.ItemLendStatus = 2
+      @lendData.save
       render 'show_lend'
 	  flash[:notice] = "儲存成功"
-    else
-	  render 'new_lend'
-      flash[:error] = "儲存失敗"
+	rescue
+	  if @lendData.save == false
+	    render 'new_lend'
+        flash[:error] = "儲存失敗"
+      end
     end
   end
 
@@ -79,7 +85,8 @@ class LendController < ApplicationController
  
   def audit
     @error = Array.new
-    @itemData = Item
+	@itemData = Item
+	@success = 0
     if params.has_key?(:audit)
       @data = params[:audit]
       @data.keys.each do |id|
@@ -103,17 +110,26 @@ class LendController < ApplicationController
             @error.push(@editItem.ItemName + "目前無法借用，請重新審核" + @editLend.LendName + "的借用表單")
           end
         when 'reject'
-          @editLend.ItemLendStatus = 0
+		  @editLend.ItemLendStatus = 0
+		  if Item.where(:id => @editLend.ItemId).blank? == false
+		    if @editItem.ItemStatus == 2
+              @editItem.ItemStatus = 1
+              @editItem.save
+            else
+              @error.push(@editItem.ItemName + "借用釋放失敗，請到物品管理頁面處理該物品")
+            end
+		  end
         when 'default'
           nil
         end
 		@editLend.save
+		@success = 1
       end
     end
-    @lendData = Lend.where("ItemLendStatus = ?",2)
+    @lendData = Lend.where("ItemLendStatus <= ?",2).order(:ItemLendStatus)
   end
 
   def lend_params
-    params.require(:lend).permit(:LendName, :LendEmail, :ItemId, :ItemLendStatus, :PassTime)
+    params.require(:lend).permit(:LendName, :LendEmail, :LendUnit, :ItemId, :ItemLendStatus, :PassTime)
   end
 end

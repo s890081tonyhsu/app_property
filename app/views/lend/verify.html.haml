@@ -32,6 +32,9 @@
       %tr
         %td
           = anLend.LendName
+          .btn-group.pull-right
+            = link_to button_tag("編輯", :class => "btn-success"), :action => "modify_lend", :id => anLend.id
+            = link_to button_tag("刪除", :class => "btn-danger"), :action => "delete_lend", :id => anLend.id
         %td
           - if Item.where(:id => anLend.ItemId).blank?
             = content_tag("該物品已被刪除")

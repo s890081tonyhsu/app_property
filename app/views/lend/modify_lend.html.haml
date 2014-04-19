@@ -25,6 +25,15 @@
         .col-sm-4.has-error
           - @lendData.errors[:LendEmail].each do |detail|
             = label(:lendNew, :LendEmail, detail, class: "control-label")
+    - @unitError = @lendData.errors[:LendUnit].any? ? 1:0
+    .form-group{:style => "padding-top:10px;", :class => @unitError == 1 ? "has-error":"has-success"}
+      = label(:lendNew, :LendUnit, "借用單位", class: "col-sm-2 control-label")
+      .col-sm-2
+        = form.text_field :LendUnit, class: 'form-control'
+      - if @lendData.errors[:LendName].any?
+        .col-sm-4.has-error
+          - @lendData.errors[:LendName].each do |detail|
+            = label(:lendNew, :LendName, detail, class: "control-label")
     - @itemError = @lendData.errors[:ItemId].any? ? 1:0
     .form-group{:class => @itemError == 1 ? "has-error":"has-success"}
       = label(:lendNew, :ItemNum, "借用物品", class: "col-sm-2 control-label")
