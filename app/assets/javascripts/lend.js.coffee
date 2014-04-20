@@ -12,6 +12,7 @@ sort_audit = ->
       $('.ItemLendStatus_'+status).fadeIn()
       $(this).addClass('active')
 
+$(document).ready(sort_audit)
 $(document).on('page:load', sort_audit)
 
 root = exports ? this
