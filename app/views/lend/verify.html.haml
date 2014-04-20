@@ -3,28 +3,38 @@
 - lendStatus = ["不予准許","正在借用","審核中","違規過期"]
 - statusClass = ["btn-danger", "btn-success", "btn-warning", "btn-danger"]
 
-%p 請輸入你的姓名和電子郵件，以便取得你的借閱資訊
+.col-sm-12.alert.alert-info{:style => "padding-top:10px;"}
+  請輸入你的姓名和電子郵件，以便取得你的借閱資訊
+  %br
+  在取得資料之後，你將會有60分鐘的存取時間可使用，超過的話請重新輸入表單以便重新取得
 
-.form-horizontal{:role => 'form'}
+%div{:class => [@msg[:note],"col-sm-12"], :style => "padding-top:10px;"}
+  %button.close{"aria-hidden" => "true", "data-dismiss" => "alert", :type => "button"} &times;
+  = content_tag :div, @msg[:data], :id => "flash_certification"
+
+.col-sm-12.form-horizontal{:role => 'form', :style => "padding-top:10px;"}
   = form_tag lend_path+'/verify' do
-    .form-group
-      = label_tag 'name', '借用人姓名', class: 'col-sm-2 control-label'
-      .col-sm-2
+    .form-group.col-sm-6
+      = label_tag 'name', '借用人姓名', class: 'col-sm-4 control-label'
+      .col-sm-8
         = text_field_tag 'name', nil, class: 'form-control'
-    .form-group
-      = label_tag 'email', "借用人電子郵件", class: 'col-sm-2 control-label'
-      .col-sm-4
+    .form-group.col-sm-6
+      = label_tag 'email', "借用人電子郵件", class: 'col-sm-4 control-label'
+      .col-sm-8
         = text_field_tag 'email', nil, class: 'form-control'
     .form-group
-      .col-sm-offset-2.col-sm-8
-        = submit_tag 'Save', class: 'form-control'
+      .col-sm-offset-4.col-sm-4
+        = submit_tag '取得憑證', class: 'form-control btn btn-info'
 
-- if @name.blank? && @email.blank?
-  = content_tag("目前沒有資料")
+%br
+
+- if @lendData.blank?
+  .col-sm-12
+    = content_tag(:div, "目前沒有資料", class: "text-center")
 - else
   %table.table.table-hover
     %tr
-      %th 借閱人姓名
+      %th 借閱人姓名 @借閱單位
       %th 借閱物品
       %th 批准狀態
       %th 申請表單日期
@@ -32,6 +42,7 @@
       %tr
         %td
           = anLend.LendName
+          = '@' + anLend.LendUnit
           .btn-group.pull-right
             = link_to button_tag("編輯", :class => "btn-success"), :action => "modify_lend", :id => anLend.id
             = link_to button_tag("刪除", :class => "btn-danger"), :action => "delete_lend", :id => anLend.id
