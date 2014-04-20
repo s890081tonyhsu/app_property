@@ -54,17 +54,17 @@ class LendController < ApplicationController
 		  end
         when 1
       	redirect_to lend_verify_path
-          flash.now[:error] = "你憑證和資料不符合，請重新申請"
+          flash[:error] = "你憑證和資料不符合，請重新申請"
         when 2
           redirect_to lend_verify_path
-          flash.now[:error] = "你目前沒有憑證，請重新申請"
+          flash[:error] = "你目前沒有憑證，請重新申請"
         when 3
           redirect_to lend_verify_path
-          flash.now[:error] = "出現未知錯誤，請重新嘗試"
+          flash[:error] = "出現未知錯誤，請重新嘗試"
       end
 	rescue
 	  redirect_to lend_verify_path
-	  flash.now[:error] = "出現未知錯誤，請重新嘗試"
+	  flash[:error] = "出現未知錯誤，請重新嘗試"
 	end
   end
   def update_lend
@@ -88,13 +88,13 @@ class LendController < ApplicationController
 		  end
    	    when 1
    	  	redirect_to lend_verify_path
-   	      flash.now[:error] = "你憑證和資料不符合，請重新申請"
+   	      flash[:error] = "你憑證和資料不符合，請重新申請"
    	    when 2
    	      redirect_to lend_verify_path
-   	      flash.now[:error] = "你目前沒有憑證，請重新申請"
+   	      flash[:error] = "你目前沒有憑證，請重新申請"
    	    when 3
    	      redirect_to lend_verify_path
-   	      flash.now[:error] = "出現未知錯誤，請重新嘗試"
+   	      flash[:error] = "出現未知錯誤，請重新嘗試"
    	  end
 	rescue
 	  if @lendData.save == false
@@ -112,19 +112,19 @@ class LendController < ApplicationController
 	    when 0
           redirect_to lend_verify_path(:name => @lendData[:LendName], :email => @lendData[:LendEmail]) 
 	      if @lendData.destroy
-            flash.now[:notice] = "刪除成功"
+            flash[:notice] = "刪除成功"
 	  	else
-            flash.now[:error] = "刪除失敗"
+            flash[:error] = "刪除失敗"
 	  	end
         when 1
 	  	redirect_to lend_verify_path
-          flash.now[:error] = "你憑證和資料不符合，請重新申請"
+          flash[:error] = "你憑證和資料不符合，請重新申請"
 	    when 2
           redirect_to lend_verify_path
-	      flash.now[:error] = "你目前沒有憑證，請重新申請"
+	      flash[:error] = "你目前沒有憑證，請重新申請"
         when 3
           redirect_to lend_verify_path
-	      flash.now[:error] = "出現未知錯誤，請重新嘗試"
+	      flash[:error] = "出現未知錯誤，請重新嘗試"
 	  end
 	rescue
     end
