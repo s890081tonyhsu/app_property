@@ -34,11 +34,11 @@ class LendController < ApplicationController
       @lendData.ItemLendStatus = 2
       @lendData.save
       render 'show_lend'
-  	  flash[:notice] = "儲存成功"
+  	  flash.now[:notice] = "儲存成功"
 	rescue
       if @lendData.save == false
   	    render 'new_lend'
-        flash[:error] = "儲存失敗"
+        flash.now[:error] = "儲存失敗"
       end
 	end	  
   end
@@ -48,23 +48,23 @@ class LendController < ApplicationController
       token = certification(cookies[:verify], @lendData)
       case token
         when 0
-          flash[:notice] = "資料載入成功"
+          flash.now[:notice] = "資料載入成功"
 		  if @lendData.ItemLendStatus % 2 != 0
-   	        flash[:info] = "請注意，非審核或是回絕之申請無法進行修改"
+   	        flash.now[:info] = "請注意，非審核或是回絕之申請無法進行修改"
 		  end
         when 1
       	redirect_to lend_verify_path
-          flash[:error] = "你憑證和資料不符合，請重新申請"
+          flash.now[:error] = "你憑證和資料不符合，請重新申請"
         when 2
           redirect_to lend_verify_path
-          flash[:error] = "你目前沒有憑證，請重新申請"
+          flash.now[:error] = "你目前沒有憑證，請重新申請"
         when 3
           redirect_to lend_verify_path
-          flash[:error] = "出現未知錯誤，請重新嘗試"
+          flash.now[:error] = "出現未知錯誤，請重新嘗試"
       end
 	rescue
 	  redirect_to lend_verify_path
-	  flash[:error] = "出現未知錯誤，請重新嘗試"
+	  flash.now[:error] = "出現未知錯誤，請重新嘗試"
 	end
   end
   def update_lend
@@ -81,25 +81,25 @@ class LendController < ApplicationController
    	      if @lendData.ItemLendStatus % 2 == 0
    	        @lendData.save
    	        render 'show_lend'
-   	        flash[:notice] = "儲存成功"
+   	        flash.now[:notice] = "儲存成功"
           else
             render 'show_lend'
-   	        flash[:warning] = "抱歉，非審核或是回絕之申請無法進行修改"
+   	        flash.now[:warning] = "抱歉，非審核或是回絕之申請無法進行修改"
 		  end
    	    when 1
    	  	redirect_to lend_verify_path
-   	      flash[:error] = "你憑證和資料不符合，請重新申請"
+   	      flash.now[:error] = "你憑證和資料不符合，請重新申請"
    	    when 2
    	      redirect_to lend_verify_path
-   	      flash[:error] = "你目前沒有憑證，請重新申請"
+   	      flash.now[:error] = "你目前沒有憑證，請重新申請"
    	    when 3
    	      redirect_to lend_verify_path
-   	      flash[:error] = "出現未知錯誤，請重新嘗試"
+   	      flash.now[:error] = "出現未知錯誤，請重新嘗試"
    	  end
 	rescue
 	  if @lendData.save == false
 	    render 'new_lend'
-        flash[:error] = "儲存失敗"
+        flash.now[:error] = "儲存失敗"
       end
     end
   end
@@ -112,19 +112,19 @@ class LendController < ApplicationController
 	    when 0
           redirect_to lend_verify_path(:name => @lendData[:LendName], :email => @lendData[:LendEmail]) 
 	      if @lendData.destroy
-            flash[:notice] = "刪除成功"
+            flash.now[:notice] = "刪除成功"
 	  	else
-            flash[:error] = "刪除失敗"
+            flash.now[:error] = "刪除失敗"
 	  	end
         when 1
 	  	redirect_to lend_verify_path
-          flash[:error] = "你憑證和資料不符合，請重新申請"
+          flash.now[:error] = "你憑證和資料不符合，請重新申請"
 	    when 2
           redirect_to lend_verify_path
-	      flash[:error] = "你目前沒有憑證，請重新申請"
+	      flash.now[:error] = "你目前沒有憑證，請重新申請"
         when 3
           redirect_to lend_verify_path
-	      flash[:error] = "出現未知錯誤，請重新嘗試"
+	      flash.now[:error] = "出現未知錯誤，請重新嘗試"
 	  end
 	rescue
     end

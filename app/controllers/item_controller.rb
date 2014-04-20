@@ -7,12 +7,12 @@ class ItemController < ApplicationController
   end
   def create_item
     @itemData = Item.new(item_params)
-    if @itemData.save
-      render 'show_item'
-	  flash[:notice] = "儲存成功"
+    if @itemData.save 
+	  flash.now[:notice] = "儲存成功"
+	  render 'show_item'
     else
+      flash.now[:error] = "儲存失敗"
 	  render 'new_item'
-      flash[:error] = "儲存失敗"
     end	  
   end
 
@@ -24,11 +24,11 @@ class ItemController < ApplicationController
     @itemId = params[:id]
     @itemData = Item.find(@itemId)
     if @itemData.update_attributes(item_params)
-      render 'show_item'
-	  flash[:notice] = "儲存成功"
+	  flash.now[:success] = "儲存成功"
+	  render 'show_item'
     else
-	  render 'edit_item'
-      flash[:error] = "儲存失敗"
+      flash.now[:error] = "儲存失敗"
+	  render 'modify_item'
     end
   end
 
