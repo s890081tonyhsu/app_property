@@ -31,7 +31,10 @@
   = form_tag lend_path+'/audit' do
     %table.table.table-hover
       %tr
-        %th 借閱人姓名 @借閱單位
+        %th 
+          借閱人姓名
+          %br
+          @借閱單位
         %th 借閱物品
         %th 批准狀態
         %th 申請表單日期
@@ -39,6 +42,7 @@
         %tr{:class => "ItemLendStatus_" + anLend.ItemLendStatus.to_s}
           %td
             = anLend.LendName
+            %br
             = '@' + anLend.LendUnit
           %td
             - if Item.where(:id => anLend.ItemId).blank?
@@ -50,13 +54,13 @@
               = link_to button_tag(lendStatus[anLend.ItemLendStatus], :class => ["btn", statusClass[anLend.ItemLendStatus]]), :action => "show_lend", :id => anLend.id
             .well.switch{:class => anLend.ItemLendStatus == 2? "switch-3":""}
               = radio_button_tag 'audit' + '[' + anLend.id.to_s + ']', 'default', true
-              = label_tag 'audit[' + anLend.id.to_s + ']_default', '未決定', onclick: "", class: "col-ms-12"
+              = label_tag 'audit[' + anLend.id.to_s + ']_default', '<span class="glyphicon glyphicon-time"></span><span class="glyphicon-content">待定</span>'.html_safe, onclick: "", class: "col-ms-12"
               - if anLend.ItemLendStatus != 1
                 = radio_button_tag 'audit' + '[' + anLend.id.to_s + ']', 'pass'
-                = label_tag 'audit[' + anLend.id.to_s + ']_pass', '通過', onclick: "", class: "col-ms-12"
+                = label_tag 'audit[' + anLend.id.to_s + ']_pass', '<span class="glyphicon glyphicon-ok"></span><span class="glyphicon-content">通過</span>'.html_safe, onclick: "", class: "col-ms-12"
               - if anLend.ItemLendStatus != 0
                 = radio_button_tag 'audit' + '[' + anLend.id.to_s + ']', 'reject'
-                = label_tag 'audit[' + anLend.id.to_s + ']_reject', '回絕', onclick: "", class: "col-ms-12"
+                = label_tag 'audit[' + anLend.id.to_s + ']_reject', '<span class="glyphicon glyphicon-remove"></span><span class="glyphicon-content">回絕</span>'.html_safe, onclick: "", class: "col-ms-12"
               %span.slide-button.btn.btn-info
           %td
             = anLend.created_at

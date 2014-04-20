@@ -2,4 +2,16 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-@import 'toggle-switch'
+@import 'toggle-switch';
+
+.glyphicon{
+  @media screen and (min-width:768px){
+    display:none;
+  }
+}
+
+.glyphicon-content{
+  @media screen and (max-width:767px){
+    display:none;
+  }
+}
