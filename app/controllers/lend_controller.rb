@@ -1,4 +1,5 @@
 require 'date'
+require 'digest/sha2'
 class LendController < ApplicationController
   def view_lend
     @lendData = Lend.all
@@ -42,21 +43,59 @@ class LendController < ApplicationController
 	end	  
   end
   def modify_lend
-    @lendId = params[:id]
-    @lendData = Lend.find(@lendId)
+    begin
+      @lendData = Lend.find(params[:id])
+      token = certification(cookies[:verify], @lendData)
+      case token
+        when 0
+          flash[:notice] = "資料載入成功"
+		  if @lendData.ItemLendStatus % 2 != 0
+   	        flash[:info] = "請注意，非審核或是回絕之申請無法進行修改"
+		  end
+        when 1
+      	redirect_to lend_verify_path
+          flash[:error] = "你憑證和資料不符合，請重新申請"
+        when 2
+          redirect_to lend_verify_path
+          flash[:error] = "你目前沒有憑證，請重新申請"
+        when 3
+          redirect_to lend_verify_path
+          flash[:error] = "出現未知錯誤，請重新嘗試"
+      end
+	rescue
+	  redirect_to lend_verify_path
+	  flash[:error] = "出現未知錯誤，請重新嘗試"
+	end
   end
   def update_lend
-	@itemData = Item 
-    @lendId = params[:id]
-	begin
-      @lendData = Lend.find(@lendId)
-      @itemId = @lendData.ItemId
-	  @itemTime = Item.find(@itemId).ItemDeadline
-	  @lendData.DeadTime = (@lendData.PassTime.to_date + @itemTime).iso8601
-	  @lendData.ItemLendStatus = 2
-      @lendData.save
-      render 'show_lend'
-	  flash[:notice] = "儲存成功"
+    begin
+   	  @itemData = Item 
+   	  @lendId = params[:id]
+   	  @lendData = Lend.find(params[:id])
+   	  token = certification(cookies[:verify], @lendData)
+   	  case token
+   	    when 0
+   	      @itemId = @lendData.ItemId
+   	      @itemTime = Item.find(@itemId).ItemDeadline
+   	      @lendData.DeadTime = (@lendData.PassTime.to_date + @itemTime).iso8601
+   	      if @lendData.ItemLendStatus % 2 == 0
+   	        @lendData.save
+   	        render 'show_lend'
+   	        flash[:notice] = "儲存成功"
+          else
+            render 'show_lend'
+   	        flash[:warning] = "抱歉，非審核或是回絕之申請無法進行修改"
+		  end
+   	    when 1
+   	  	redirect_to lend_verify_path
+   	      flash[:error] = "你憑證和資料不符合，請重新申請"
+   	    when 2
+   	      redirect_to lend_verify_path
+   	      flash[:error] = "你目前沒有憑證，請重新申請"
+   	    when 3
+   	      redirect_to lend_verify_path
+   	      flash[:error] = "出現未知錯誤，請重新嘗試"
+   	  end
 	rescue
 	  if @lendData.save == false
 	    render 'new_lend'
@@ -66,9 +105,29 @@ class LendController < ApplicationController
   end
 
   def delete_lend
-    @lendData = Lend.find(params[:id])
-	@lendData.destroy
-	redirect_to :action => 'view_lend'
+    begin
+      @lendData = Lend.find(params[:id])
+      token = certification(cookies[:verify], @lendData)
+	  case token
+	    when 0
+          redirect_to lend_verify_path(:name => @lendData[:LendName], :email => @lendData[:LendEmail]) 
+	      if @lendData.destroy
+            flash[:notice] = "刪除成功"
+	  	else
+            flash[:error] = "刪除失敗"
+	  	end
+        when 1
+	  	redirect_to lend_verify_path
+          flash[:error] = "你憑證和資料不符合，請重新申請"
+	    when 2
+          redirect_to lend_verify_path
+	      flash[:error] = "你目前沒有憑證，請重新申請"
+        when 3
+          redirect_to lend_verify_path
+	      flash[:error] = "出現未知錯誤，請重新嘗試"
+	  end
+	rescue
+    end
   end
   
   def verify
@@ -81,6 +140,14 @@ class LendController < ApplicationController
 		@name = ""
 		@email = ""
     end
+	if cookies[:verify]
+      @msg = {:data => "目前憑證存在，如果看不到借閱資料請重新輸入表單取得", :note => "alert alert-warning"}
+	elsif @lendData.blank? == false
+      cookies[:verify] = {:value => Digest::SHA2.hexdigest(@name + @email), :expires => Time.now + 60}
+	  @msg = {:data => "已建立憑證，編輯與刪除需透過此憑證", :note => "alert alert-success"}
+	else
+      @msg = {:data => "請輸入資料以便取得修改資料之憑證", :note => "alert alert-warning"}
+	end
   end
  
   def audit
@@ -131,5 +198,18 @@ class LendController < ApplicationController
 
   def lend_params
     params.require(:lend).permit(:LendName, :LendEmail, :LendUnit, :ItemId, :ItemLendStatus, :PassTime)
+  end
+  def certification(key, data)
+    token = 3
+    begin
+      if key == Digest::SHA2.hexdigest(data[:LendName] + data[:LendEmail])
+        token = 0
+      else
+        token = 1
+	  end
+	rescue
+	  token = 2
+	end
+	token
   end
 end
