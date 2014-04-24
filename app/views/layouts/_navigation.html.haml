@@ -1,13 +1,34 @@
 -# navigation styled for Bootstrap 3.0
-%nav.navbar.navbar-default.navbar-fixed-top
-  .container
-    .navbar-header
-      %button.navbar-toggle{"data-target" => ".top-nav", "data-toggle" => "collapse", :type => "button"}
-        %span.sr-only Toggle navigation
-        %span.icon-bar
-        %span.icon-bar
-        %span.icon-bar
-      = link_to 'Home', root_path, class: 'navbar-brand'
-    .collapse.navbar-collapse.top-nav
-      %ul.nav.navbar-nav
-        = render 'layouts/navigation_links'
+
+.text-center
+  %h1 中興大學會產借用系統
+
+- tabTitle = [{:name => "item", :path => item_path, :title => "物品清單頁面"}, {:name => "lend",:path => lend_path, :title => "借閱清單頁面"}]
+
+- tabList = {"item" => [{:name => "新增物品", :link => "/new"},{:name => "修改物品", :link => "#"},{:name => "刪除物品", :link => "#"}],"lend" => [{:name => "新增借閱", :link => "/new"},{:name => "管理借閱", :link => "/verify"},{:name => "審核借閱", :link => "/audit"}]}
+.container
+  %nav.navbar.navbar-default.navbar-static{:role => "navigation"}
+    .container-fluid
+      - tabTitle.each do|subName|
+        - if request.original_url.include? subName[:name]
+          .navbar-header
+            %button.navbar-toggle{:"data-toggle" => "collapse", :"data-target" => "#property-subnav", :type => "button"}
+              %span.sr-only Toggle navigation
+              %span.icon-bar
+              %span.icon-bar
+              %span.icon-bar
+            .dropdown
+              = link_to subName[:title], '#', class: 'navbar-brand dropdown-toggle', 'data-toggle' => 'dropdown', role: 'button'
+              %ul.dropdown-menu{:role => "menu", "aria-labelledby" => "dLabel", :style =>'margin-top:50px;'}
+                - tabTitle.each do|subTitle|
+                  - if request.original_url.include? subTitle[:name]
+                    %li.active
+                      = link_to subTitle[:title], subTitle[:path]
+                  - else
+                    %li
+                      = link_to subTitle[:title], subTitle[:path]
+          #property-subnav.collapse.navbar-collapse.top-nav
+            %ul.nav.navbar-nav
+              - tabList[subName[:name]].each do|list|
+                %li
+                  = link_to list[:name], subName[:path] + list[:link]

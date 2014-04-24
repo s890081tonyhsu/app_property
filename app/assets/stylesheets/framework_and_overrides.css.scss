@@ -31,12 +31,20 @@ img {
   }
 // apply styles to HTML elements
 // to make views framework-neutral
+body {
+  background-position: center top;
+  background-repeat: repeat-x;
+  background-color: #EDF4F8;
+  background-image: url("http://res.nchusg.org/img/bs_bg.jpg");
+  }
 main {
   @extend .container;
-  background-color: #eee;
+  background-color: rgba(247, 247, 247, 0.99);
   padding-bottom: 80px;
-  width: 100%;
   margin-top: 51px; // accommodate the navbar
+  }
+header {
+  margin-top:50px;
   }
 section {
   @extend .row;

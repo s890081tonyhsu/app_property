@@ -1,0 +1,129 @@
+%nav#rs_nav.navbar.navbar-inverse.navbar-fixed-top{role: "navigation"}
+  :css
+    a.app_offline{
+    		color:#999!important;
+    		cursor:not-allowed;
+    		text-decoration:line-through;
+    	}
+
+    nav#rs_nav div#nav_title_bg{
+    	background: url('http://res.nchusg.org/img/bs_sLogo.png') no-repeat center;
+    	background-size:100% 100%;
+    }
+
+    nav#rs_nav a#nav_title{
+    	transition-property: opacity;
+    	transition-duration: 0.3s;
+    	transition-timing-function: linear;
+    	/* Safari */
+    	-webkit-transition-property:opacity;
+    	-webkit-transition-duration:0.3s;
+    	-webkit-transition-timing-function:linear;
+
+    	background: rgb(32, 32, 32);
+    	opacity: 1;
+    }
+
+    nav#rs_nav a#nav_title:hover{
+    	opacity: 0;
+    }
+  / Brand and toggle get grouped for better mobile display
+  .navbar-header
+    %button.navbar-toggle{"data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", type: "button"}
+      %span.sr-only Toggle navigation
+      %span.icon-bar
+      %span.icon-bar
+      %span.icon-bar
+    #nav_title_bg.hidden-xs{style: "height:50px"}
+      %a#nav_title.hidden-xs.navbar-brand{href: "http://nchusg.org", title: "回興大學生會首頁"} NCHUSG
+    %a.navbar-brand.visible-xs{href: "http://nchusg.org"} NCHUSG
+    %p.navbar-text.visible-xs 中興大學學生會
+  / Collect the nav links, forms, and other content for toggling
+  #bs-example-navbar-collapse-1.collapse.navbar-collapse
+    %ul.nav.navbar-nav
+      %li.dropdown
+        %a.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
+          關於
+          %b.caret
+        %ul.dropdown-menu
+          %li
+            %a{href: "http://nchusg.org/sg/about"} 基本介紹
+          %li
+            %a{href: "http://wiki.nchusg.org/index.php/%E5%AD%B8%E7%94%9F%E6%9C%83:%E7%B5%84%E7%B9%94%E6%9E%B6%E6%A7%8B", target: "_blank"} 組織架構
+          %li
+            %a{href: "http://wiki.nchusg.org/index.php/%E5%AD%B8%E7%94%9F%E6%9C%83:%E6%AD%B7%E5%B1%86%E5%B9%B9%E9%83%A8%E8%88%87%E6%88%90%E5%93%A1", target: "_blank"} 歷屆幹部
+          %li
+            %a{href: "http://wiki.nchusg.org/index.php/%E5%AD%B8%E7%94%9F%E6%9C%83:%E8%A1%8C%E6%94%BF%E4%B8%AD%E5%BF%83", target: "_blank"} 行政 | 行政中心
+          %li
+            %a{href: "http://wiki.nchusg.org/index.php/%E5%AD%B8%E7%94%9F%E6%9C%83:%E5%AD%B8%E7%94%9F%E4%BB%A3%E8%A1%A8%E5%A4%A7%E6%9C%83", target: "_blank"} 立法 | 學生代表大會
+          %li
+            %a{href: "http://wiki.nchusg.org/index.php/%E5%AD%B8%E7%94%9F%E6%9C%83:%E5%AD%B8%E7%94%9F%E4%BB%B2%E8%A3%81%E8%A9%95%E8%AD%B0%E5%A7%94%E5%93%A1%E6%9C%83", target: "_blank"} 司法 | 仲裁評議委員會
+    %ul.nav.navbar-nav
+      %li.dropdown
+        %a.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
+          服務 & 功能
+          %b.caret
+        %ul.dropdown-menu
+          %li.dropdown-header{role: "presentation"} All
+          %li
+            %a.app_offline{href: "http://irc.nchusg.org/"} IRC聊天室
+          %li.dropdown-header{role: "presentation"} Students
+          %li
+            %a.app_offline{href: "#"} 學生權益申訴系統
+          %li
+            %a{href: "http://app.nchusg.org/poster_manager/"} 海報欄位申請系統
+          %li.divider
+          %li.dropdown-header{role: "presentation"} NCHUSG
+          %li
+            %a{href: "http://app.nchusg.org/election"} 三合一選舉
+          %li
+            %a.app_offline{href: "#"} 會費繳費狀況查詢
+          %li
+            %a.app_offline{href: "#"} 會產借用系統
+    %ul.nav.navbar-nav
+      %li.dropdown
+        %a.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
+          文件 & 資料
+          %b.caret
+        %ul.dropdown-menu
+          %li.dropdown-header{role: "presentation"} SG
+          %li
+            %a{href: "http://wiki.nchusg.org/index.php/%E5%AD%B8%E7%94%9F%E6%9C%83:%E6%9C%83%E8%AD%B0%E8%A8%98%E9%8C%84", target: "_blank"} 會議記錄
+          %li
+            %a{href: "http://wiki.nchusg.org/index.php/%E5%AD%B8%E7%94%9F%E6%9C%83:%E8%B2%A1%E5%8B%99%E6%96%87%E4%BB%B6", target: "_blank"} 財務文件
+          %li
+            %a{href: "http://wiki.nchusg.org/index.php/%E6%B3%95%E8%A6%8F:%E5%AD%B8%E7%94%9F%E6%9C%83%E6%B3%95%E8%A6%8F%E5%BD%99%E7%B7%A8", target: "_blank"} 法規彙編
+          %li.dropdown-header{role: "presentation"} NCHU
+          %li
+            %a{href: "http://wiki.nchusg.org/index.php/%E7%A4%BE%E5%9C%98:%E6%B8%85%E5%96%AE/%E7%AC%AC102%E5%AD%B8%E5%B9%B4%E5%BA%A6", target: "_blank"} 社團/學會清單
+    %ul.nav.navbar-nav.navbar-right
+      %li
+        %a{href: "https://www.facebook.com/nchusg", target: "_blank"} 粉絲專頁
+      %li
+        %a{href: "http://wiki.nchusg.org/", target: "_blank"} 黑天鵝會誌
+      %li.dropdown
+        %a.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
+          開發團隊
+          %b.caret
+        %ul.dropdown-menu
+          %li
+            %a{href: "http://wiki.nchusg.org/index.php/%E5%AD%B8%E7%94%9F%E6%9C%83:%E8%A1%8C%E6%94%BF%E4%B8%AD%E5%BF%83/%E8%B3%87%E8%A8%8A%E9%83%A8", target: "_blank"} About
+          %li
+            %a{href: "http://nchusginfo.tumblr.com/", target: "_blank"} Tumblr
+          %li
+            %a{href: "https://trello.com/b/cUEXcn6L/project-manager", target: "_blank"} Trello
+  / /.navbar-collapse
+  :javascript
+    $('a.dropdown-toggle').mouseover(function(){
+    	if($('div.navbar-collapse.collapse').is('div'))
+    		$(this).parent().addClass('open').mouseleave(function(){
+    			$(this).removeClass('open')
+    		});
+    });
+
+    $('#nav_title').bind('mouseover',function(){
+    	$(this).tooltip({
+    		placement:'bottom',
+    		trigger:'hover'
+    	}).unbind('mouseover').tooltip('show');
+    });
