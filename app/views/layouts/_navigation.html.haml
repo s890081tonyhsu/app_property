@@ -3,14 +3,20 @@
 .text-center
   %h1 中興大學會產借用系統
 
-- tabTitle = [{:name => "item", :path => item_path, :title => "物品清單頁面"}, {:name => "lend",:path => lend_path, :title => "借閱清單頁面"}]
+- tabTitle = [{:name => "", :path => root_path, :title => "系統首頁"}, {:name => "item", :path => item_path, :title => "物品清單頁面"}, {:name => "lend",:path => lend_path, :title => "借閱清單頁面"}]
 
-- tabList = {"item" => [{:name => "新增物品", :link => "/new"},{:name => "修改物品", :link => "#"},{:name => "刪除物品", :link => "#"}],"lend" => [{:name => "新增借閱", :link => "/new"},{:name => "管理借閱", :link => "/verify"},{:name => "審核借閱", :link => "/audit"}]}
+- tabList = {"" => [{:name => "關於此系統", :link => 'about'},{:name => "物品清單頁面", :link => 'item'},{:name => "借閱清單頁面", :link => 'lend'}], "item" => [{:name => "新增物品", :link => "/new"},{:name => "修改物品", :link => "#"},{:name => "刪除物品", :link => "#"}],"lend" => [{:name => "新增借閱", :link => "/new"},{:name => "管理借閱", :link => "/verify"},{:name => "審核借閱", :link => "/audit"}]}
+
+- navName = ''
+- tabTitle.each do|subName|
+  - if request.original_url.include? subName[:name]
+    - navName = subName[:name]
+
 .container
   %nav.navbar.navbar-default.navbar-static{:role => "navigation"}
     .container-fluid
       - tabTitle.each do|subName|
-        - if request.original_url.include? subName[:name]
+        - if navName == subName[:name]
           .navbar-header
             %button.navbar-toggle{:"data-toggle" => "collapse", :"data-target" => "#property-subnav", :type => "button"}
               %span.sr-only Toggle navigation
@@ -21,14 +27,14 @@
               = link_to subName[:title], '#', class: 'navbar-brand dropdown-toggle', 'data-toggle' => 'dropdown', role: 'button'
               %ul.dropdown-menu{:role => "menu", "aria-labelledby" => "dLabel", :style =>'margin-top:50px;'}
                 - tabTitle.each do|subTitle|
-                  - if request.original_url.include? subTitle[:name]
-                    %li.active
-                      = link_to subTitle[:title], subTitle[:path]
-                  - else
-                    %li
-                      = link_to subTitle[:title], subTitle[:path]
+                  %li{:class => navName == subTitle[:name]? 'active':''}
+                    = link_to subTitle[:title], subTitle[:path]
           #property-subnav.collapse.navbar-collapse.top-nav
             %ul.nav.navbar-nav
               - tabList[subName[:name]].each do|list|
-                %li
+                %li{:class => request.original_url.include?(list[:link])? 'active':''}
                   = link_to list[:name], subName[:path] + list[:link]
+            %ul.nav.navbar-nav.navbar-right
+              - if navName != ''
+                %li
+                  = link_to '回到主頁', root_path

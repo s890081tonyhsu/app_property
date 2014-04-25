@@ -31,7 +31,11 @@ img {
   }
 // apply styles to HTML elements
 // to make views framework-neutral
+html {
+  height:100%;
+  }
 body {
+  height:100%;
   background-position: center top;
   background-repeat: repeat-x;
   background-color: #EDF4F8;
@@ -39,9 +43,13 @@ body {
   }
 main {
   @extend .container;
-  background-color: rgba(247, 247, 247, 0.99);
+  background-color: none;
   padding-bottom: 80px;
   margin-top: 51px; // accommodate the navbar
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -60px;
   }
 header {
   margin-top:50px;
@@ -49,4 +57,9 @@ header {
 section {
   @extend .row;
   margin-top: 20px;
+  }
+footer{
+  height: 60px;
+  color:white;
+  background-color:rgba(20,20,20,.99);
   }

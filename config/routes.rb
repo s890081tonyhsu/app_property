@@ -1,8 +1,6 @@
 AppProperty::Application.routes.draw do
-  resources :contacts, only: [:new, :create]
-  resources :visitors, only: [:new, :create]
-  resources :test
-  root to: 'visitors#new'
+  root to: 'main#index'
+  get 'about' => 'main#about'
 
   # Item CRUD
   get "item" => "item#view_item"
