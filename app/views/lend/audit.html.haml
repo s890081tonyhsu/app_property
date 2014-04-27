@@ -50,7 +50,7 @@
           %td
             .text-center
               = link_to button_tag(lendStatus[anLend.ItemLendStatus], :class => ["btn", statusClass[anLend.ItemLendStatus]]), :action => "show_lend", :id => anLend.id
-            .well.switch{:class => anLend.ItemLendStatus == 2? "switch-3":""}
+            .switch{:class => anLend.ItemLendStatus == 2? "switch-3":""}
               = radio_button_tag 'audit' + '[' + anLend.id.to_s + ']', 'default', true
               = label_tag 'audit[' + anLend.id.to_s + ']_default', '<span class="glyphicon glyphicon-time"></span><span class="glyphicon-content">待定</span>'.html_safe, onclick: "", class: "col-ms-12"
               - if anLend.ItemLendStatus != 1
