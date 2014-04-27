@@ -1,0 +1,88 @@
+- lendStatus = ["不予准許","正在借用","審核中","違規過期"]
+- statusClass = ["btn-danger", "btn-success", "btn-warning", "btn-danger"]
+
+/ Overview
+.pm-docs-section.col-md-offset-1
+  %h1#overview 系統概觀
+  %hr
+  %h4 本系統隸屬於中興大學學生會財務部(以下簡稱財務部)管轄範圍內，由中興大學學生會資訊部(以下簡稱資訊部)負責開發部分。
+  %h3#overview-preface 系統起源
+  %p 原本財務部對於會產的管理方式是採用紙本登記處理會內各項借用事務，但因為缺乏完善的物品狀態查詢，所以委託資訊部將其紙本登記電子化進行。
+  %h3#overview-target 系統目的
+  %p 1. 解決紙本之物品狀態問題
+  %p 2. 加上預約與審核機制，以便做排隊控管
+  %h3#overflow-function 基本操作
+  %nav.navbar.navbar-default.navbar-static{:role => "navigation"}
+    .container-fluid
+      .navbar-header
+        %button.navbar-toggle{:"data-toggle" => "collapse", :"data-target" => "#pm-docs-subnav", :type => "button"}
+          %span.sr-only Toggle navigation
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+        .dropdown
+          = link_to 'Menu', '#overview-function', id: '#overview-demo-brand', class: 'navbar-brand dropdown-toggle', 'data-toggle' => 'dropdown', 'rel' => 'popover', 'data-content' => "And here's some amazing content. It's very engaging. right?", role: 'button'
+          %ul.dropdown-menu{:role => "menu", "aria-labelledby" => "dLabel", :style =>'margin-top:50px;'}
+            %li.active
+              = link_to 'Menu', '#overview-function'
+            %li
+              = link_to 'Menu 1', '#overview-function'
+            %li
+              = link_to 'Menu 2', '#overview-function'
+      #pm-docs-subnav.collapse.navbar-collapse.top-nav
+        %ul.nav.navbar-nav
+          %li.active
+            = link_to 'function 1', '#overview-function'
+          %li
+            = link_to 'function 2', '#overview-function'
+        %ul.nav.navbar-nav.navbar-right
+          %li
+            = link_to 'Back', '#overview-function'
+/ Item
+.pm-docs-section.col-md-offset-1
+  %h1#item-overview 物品管理頁面
+  %hr
+  %h4 主要放置跟會內產品的相關資訊，財務部會將所有可借用物品資訊放置在此
+  %h3#item-show 查看物品資訊
+  %p 在清單中，你可以點選物品標題以便查看該物品詳細之借用規定。
+  %p 如果該物品已被借用，本系統並不會在這裡告知有關借用者的資訊，請自行到借用管理頁面查詢。
+  %h3#item-new 新增借用物品(限管理員)
+  %p 如果經過伊爾特認證，授權為學生會幹部的人員才可以使用此功能。如同填寫一般表單的方式，必須按照規定全部填寫才算新增成功。
+  %p 但財務部擁有最終決定權來決定該物品是否允許借用，所以新增前請務必知會財務部片面資訊。
+  %h3#item-manage 管理借用物品(限管理員)
+  %p 如果經過伊爾特認證，授權為學生會幹部的人員才可以使用此功能。可對物品進行修改或刪除，但此功能為輔助借用功能的不足才可使用。
+  %p 財務部擁有最終決定權進行該物品的修改或刪除，但目前刪除功能沒有確認機制，使用前請三思。
+
+/ Lend
+.pm-docs-section.col-md-offset-1
+  %h1#lend-overview 借用管理頁面
+  %hr
+  %h4 此頁面為該系統最常使用之功能，使用者可以在此使用借用功能或是從物品管理頁面點擊「可以借用」的按鈕到達此頁之「新增借用」功能。
+  .container.col-md-6
+    %p 「可以借用」按鈕 
+    %button.btn.btn-success 可以借用
+  .container.col-md-6
+    %p 「新增借用」按鈕
+    %ul.nav.navbar-nav
+      %li
+        = link_to '新增借用', '##'
+
+  %h3#lend-show 查看借用狀況
+  %p 在該筆借用資料除了可以點擊該借用物品來查看物品資訊外，也可以點擊借用狀態來查詢該筆借用的詳細資訊
+  %h3#lend-new 申請一次借用
+  %p 在物品管理頁面點擊「可以借用」按鈕或是在此頁點擊「新增借用」按鈕都可以到達此頁(只是前者會自動填入借閱物品)。
+  %p 請注意，同一申請人和同一電子郵件地址我們才視其為同一人申請(姓名在當事人到場取得物品時將會要求抵押學生證作為返還依據)
+  %h3#lend-manage 管理個人借用
+  %p 輸入你在此系統使用之姓名與電子郵件地址，系統將返回你在此系統提交之申請，而且在限定時間內(60分鐘)，你具有修改與刪除申請的權限。
+  %p 請注意，本系統對於刪除沒有確認機制，使用刪除前請三思。
+  %h3#lend-audit 審核借用清單(限管理員)
+  %p 如果經過伊爾特驗證，權限為學生會幹部之身分，可以取得所有表單之詳細資訊並進行審核，管理員可以使用點選的方式將審核中的申請進行處理
+  .container.col-md-12.col-md-offset-4
+    %h4 審核表單之分類按鈕
+    .btn-group
+      - for i in 0..2
+        %button{:class => ["btn", statusClass[i], "active"], :statusval => i}
+          = lendStatus[i]
+  %p &nbsp;
+  %p 右上方有如上之分類按鈕，可以協助你簡化需要分析的資訊，而且本系統不要求將所有審核一次送交，你可以在確認一部份之審核正確之後，先行送交保存。
+  %p 請注意，審核結果是以按下Save按鈕為一次結果送交，但不良的操作會使使用者接受到錯誤的回報結果，送交前請先三思

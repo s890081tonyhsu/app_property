@@ -1,5 +1,4 @@
 // import the CSS framework
-@import "bootstrap";
 // make all images responsive by default
 img {
   @extend .img-responsive;
@@ -31,6 +30,8 @@ img {
   }
 // apply styles to HTML elements
 // to make views framework-neutral
+$baseFontFamily: Arial, "文泉驛正黑", "WenQuanYi Zen Hei", "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", "標楷體", DFKai-SB, sans-serif !default;
+
 html {
   height:100%;
   }
@@ -52,7 +53,7 @@ main {
   margin: 0 auto -60px;
   }
 header {
-  margin-top:50px;
+  margin-top:75px;
   }
 section {
   @extend .row;
@@ -62,4 +63,10 @@ footer{
   height: 60px;
   color:white;
   background-color:rgba(20,20,20,.99);
+  }
+.row{
+  border-radius:10px;
+  }
+p{
+  font-size:14px;
   }

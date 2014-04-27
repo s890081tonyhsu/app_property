@@ -3,4 +3,6 @@ class MainController < ApplicationController
   end
   def about
   end
+  def intrroduction
+  end
 end

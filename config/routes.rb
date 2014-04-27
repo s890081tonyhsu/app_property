@@ -1,6 +1,7 @@
 AppProperty::Application.routes.draw do
   root to: 'main#index'
   get 'about' => 'main#about'
+  get 'introduction' => 'main#introduction'
 
   # Item CRUD
   get "item" => "item#view_item"

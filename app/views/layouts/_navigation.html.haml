@@ -5,7 +5,7 @@
 
 - tabTitle = [{:name => "", :path => root_path, :title => "系統首頁"}, {:name => "item", :path => item_path, :title => "物品清單頁面"}, {:name => "lend",:path => lend_path, :title => "借閱清單頁面"}]
 
-- tabList = {"" => [{:name => "關於此系統", :link => 'about'},{:name => "物品清單頁面", :link => 'item'},{:name => "借閱清單頁面", :link => 'lend'}], "item" => [{:name => "新增物品", :link => "/new"},{:name => "修改物品", :link => "#"},{:name => "刪除物品", :link => "#"}],"lend" => [{:name => "新增借閱", :link => "/new"},{:name => "管理借閱", :link => "/verify"},{:name => "審核借閱", :link => "/audit"}]}
+- tabList = {"" => [{:name => "關於此系統", :link => 'about'},{:name => "使用方法", :link => 'introduction'},{:name => "物品清單頁面", :link => 'item'},{:name => "借閱清單頁面", :link => 'lend'}], "item" => [{:name => "新增物品", :link => "/new"},{:name => "修改物品", :link => "#"},{:name => "刪除物品", :link => "#"},{:name => "使用方法", :link => '/../introduction#item-overview'}],"lend" => [{:name => "新增借閱", :link => "/new"},{:name => "管理借閱", :link => "/verify"},{:name => "審核借閱", :link => "/audit"},{:name => "使用方法", :link => '/../introduction#lend-overview'}]}
 
 - navName = ''
 - tabTitle.each do|subName|

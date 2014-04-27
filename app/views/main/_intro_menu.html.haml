@@ -1,0 +1,31 @@
+.pm-docs-sidebar.hidden-print.affix-top
+  %ul.nav.pm-docs-sidenav
+    %li
+      = link_to '系統概觀', '#overview'
+      %ul.nav
+        %li
+          = link_to '系統起源', '#overview-preface'
+        %li
+          = link_to '系統目的', '#overview-target'
+        %li
+          = link_to '基本操作', '#overview-function'
+    %li
+      = link_to '物品管理頁面', '#item-overview'
+      %ul.nav
+        %li
+          = link_to '查看物品資訊', '#item-show'
+        %li
+          = link_to '新增借用物品(限管理員)', '#item-new'
+        %li
+          = link_to '管理借用物品(限管理員)', '#item-manage'
+    %li
+      = link_to '借用管理頁面', '#lend-overview'
+      %ul.nav
+        %li
+          = link_to '查看借用狀況', '#lend-show'
+        %li
+          = link_to '申請一次借用', '#lend-new'
+        %li
+          = link_to '管理個人借用', '#lend-manage'
+        %li
+          = link_to '審核借用清單(限管理員)', '#lend-audit'

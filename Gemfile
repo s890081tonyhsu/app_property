@@ -16,6 +16,9 @@ gem 'google_drive'
 gem 'haml-rails'
 gem 'high_voltage'
 gem 'simple_form'
+gem 'mysql2'
+gem 'font-awesome-sass'
+gem 'tzinfo-data'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_19, :mri_20, :rbx]
@@ -28,7 +31,6 @@ group :development do
   gem 'rb-fchange', :require=>false
   gem 'rb-fsevent', :require=>false
   gem 'rb-inotify', :require=>false
-  gem 'mysql2'
 end
 group :production do
   gem 'pg'
