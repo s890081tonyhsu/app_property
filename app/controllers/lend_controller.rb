@@ -4,12 +4,16 @@ class LendController < ApplicationController
   def view_lend
     @lendData = Lend.all
 	@itemData = Item
-	@LendExpire = Lend.find(:all, :conditions => ["DeadTime <= ?", Date.yesterday.iso8601])
-	@LendExpire.each do |expireData|
-	  if expireData.ItemLendStatus == 1
-        expireData.ItemLendStatus = 3
-        expireData.save
+	begin
+	  @LendExpire = Lend.find(:all, :conditions => ["DeadTime <= ?", Date.yesterday.iso8601])
+	  @LendExpire.each do |expireData|
+	    if expireData.ItemLendStatus == 1
+          expireData.ItemLendStatus = 3
+          expireData.save
+	    end
 	  end
+	rescue
+      nil
 	end
   end
   def show_lend
