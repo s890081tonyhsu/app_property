@@ -7,6 +7,7 @@ AppProperty::Application.routes.draw do
   get "item" => "item#view_item"
   get "item/view" => "item#view_item"
   get "item/new" => "item#new_item"
+  get "item/manage" => "item#manage_item"
   get "item/:id" => "item#show_item"
   get "item/modify_item/:id" => "item#modify_item"
   get "item/delete_item/:id" => "item#delete_item"

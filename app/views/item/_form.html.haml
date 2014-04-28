@@ -1,32 +1,77 @@
-    .form-group{:style => "padding-top:10px;"}
-      = label_tag '物品名稱', nil, class: 'col-sm-2 control-label'
+- @errorStatus = ['','has-success', 'has-error']
+- @errorDetail = {:ItemName => {:status => 0, :message => ''}, :ItemNum => {:status => 0, :message => ''}, :ItemHeavy => {:status => 0, :message => ''}, :ItemStatus => {:status => 0, :message => ''}, :ItemDescription => {:status => 0, :message => ''}, :ItemDeadline => {:status => 0, :message => ''}}
+- itemStatus = ["未開放借用","可以借用", "已被借用"]
+- statusClass = ["btn-warning", "btn-success", "btn-danger"]
+- @errorDetail.each do |key, detail|
+  - if @itemData.errors[key].any?
+    - detail[:status] = 2 * @itemError
+    - @itemData.errors[key].each do |message|
+      - detail[:message] << message + ' '
+  - else
+    - detail[:status] = 1 * @itemError
+
+.form-horizontal.container{:role => "form"}
+  = form_for @itemData, :url => { :action => yield(:action) } do |form|
+    // Item's Name
+    .form-group{:class => @errorStatus[@errorDetail[:ItemName][:status].to_i]}
+      = label(:itemNew, :ItemName, "物品名稱", class: "col-sm-2 control-label")
       .col-sm-2
-        = text_field_tag 'ItemName', nil, class: 'form-control'
-    .form-group
-      = label_tag '物品個數', nil, class: 'col-sm-2 control-label'
+        = form.text_field :ItemName, class: 'form-control'
+      - if @errorDetail[:ItemName][:status] == 2
+        .col-sm-4.has-error.col-sm-offset-2
+          = label(:itemNew, :ItemName, @errorDetail[:ItemName][:message], class: "control-label")
+     
+    // Item's Number
+    .form-group{:class => @errorStatus[@errorDetail[:ItemNum][:status].to_i]}
+      = label(:itemNew, :ItemNum, "物品個數", class: "col-sm-2 control-label")
       .col-sm-2
-        = number_field_tag 'ItemNum', nil, in: 1...11, class: 'form-control'
-      = label_tag '個', nil, class: 'col-sm-6', style: 'padding-top: 7px;'
-    .form-group
-      = label_tag '物品價值', nil, class: 'col-sm-2 control-label'
+        = form.number_field :ItemNum, class: 'form-control'
+      = label(:itemNew, :ItemNum, "個", class: "col-sm-2", style: "padding-top: 7px;")
+      - if @errorDetail[:ItemNum][:status] == 2
+        .col-sm-4.has-error
+          = label(:itemNew, :ItemNum, @errorDetail[:ItemNum][:message], class: "control-label")
+     
+    // Item's Heavy
+    .form-group{:class => @errorStatus[@errorDetail[:ItemHeavy][:status].to_i]}
+      = label(:itemNew, :ItemHeavy, "物品權重", class: "col-sm-2 control-label")
       .col-sm-2
-        = number_field_tag 'ItemHeavy', nil, in: 1...11, class: 'form-control'
-    .form-group
-      = label_tag '物品狀態', nil, class: 'col-sm-2 control-label'
-      .col-sm-10.btn-group{:"data-toggle" => "buttons"}
-        - for i in 0..3
-          %label{:class => ['btn',statusClass[i]]}
-            = radio_button_tag 'ItemStatus', i
+        = form.number_field :ItemHeavy, class: 'form-control'
+      - if @errorDetail[:ItemHeavy][:status] == 2
+        .col-sm-4.has-error.col-sm-offset-2
+          = label(:itemNew, :ItemHeavy, @errorDetail[:ItemHeavy][:message], class: "control-label")
+    
+    // Item's Status
+    .form-group{:class => @errorStatus[@errorDetail[:ItemStatus][:status].to_i]}
+      = label(:itemNew, :ItemStatus, "物品狀態", class: "col-sm-2 control-label")
+      .col-sm-2.btn-group{:"data-toggle" => "buttons"}
+        - for i in 0..1
+          %label{:class => ['btn btn-sm',statusClass[i], @itemData.ItemStatus == i ? "active":""]}
+            = form.radio_button :ItemStatus, i
             = itemStatus[i]
-    .form-group
-      = label_tag '物品說明', nil, class: 'col-sm-2 control-label'
-      .col-sm-10
-        = text_area_tag 'ItemName', nil, class: 'form-control'
-    .form-group
-      = label_tag '物品可借用天數', nil, class: 'col-sm-2 control-label'
+      - if @errorDetail[:ItemStatus][:status] == 2
+        .col-sm-4.has-error.col-sm-offset-2
+          = label(:itemNew, :ItemStatus, @errorDetail[:ItemStatus][:message], class: "control-label")
+    
+    // Item's Description
+    .form-group{:class => @errorStatus[@errorDetail[:ItemDescription][:status].to_i]}
+      = label(:itemNew, :ItemDescription, "物品說明", class: "col-sm-2 control-label")
+      .col-sm-4
+        = form.text_area :ItemDescription, class: 'form-control'
+      - if @errorDetail[:ItemDescription][:status] == 2
+        .col-sm-2.has-error
+          = label(:itemNew, :ItemDescription, @errorDetail[:ItemDescription][:message], class: "control-label")
+
+    // Item's Deadline
+    .form-group{:class => @errorStatus[@errorDetail[:ItemDeadline][:status].to_i]}
+      = label(:itemNew, :ItemDeadline, "物品可借用天數", class: "col-sm-2 control-label")
       .col-sm-2
-        = number_field_tag 'ItemHeavy', nil, in: 1...31, class: 'form-control'
-      = label_tag '天', nil, class: 'col-sm-6', style: 'padding-top: 7px;'
+        = form.number_field :ItemDeadline, class: 'form-control'
+      = label_tag '天', nil, class: 'col-sm-2', style: 'padding-top: 7px;'
+      - if @errorDetail[:ItemDeadline][:status] == 2
+        .col-sm-4.has-error
+          = label(:itemNew, :ItemDeadline, @errorDetail[:ItemDeadline][:message], class: "control-label")
+    
+    // Submit the form
     .form-group
       .col-sm-offset-2.col-sm-8
         = submit_tag 'Save', class: 'form-control'

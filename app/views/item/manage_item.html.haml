@@ -1,5 +1,5 @@
 .col-sm-12.alert.alert-info
-  %p 以下物品是學生會可借用之物品，如果有需要可以在該物品右方按下借用
+  %p 本頁面為物品管理頁面，請注意本業沒有確認機制，使用時請三思
 
 - itemStatus = ["未開放借用","可以借用","已被借用"]
 - statusClass = ["btn-warning", "btn-success", "btn-danger"]
@@ -7,13 +7,15 @@
 %table.table.table-hover.white-row
   %tr
     %th 物品名稱
-    %th 物品說明
     %th 目前借用狀態
+    %th 管理物品
   - @itemData.each do |anItem| 
     %tr
       %td
         = link_to anItem.ItemName, :action => "show_item", :id => anItem.id
       %td
-        = anItem.ItemDescription
-      %td
         = link_to button_tag(itemStatus[anItem.ItemStatus], :class => ["btn", statusClass[anItem.ItemStatus], anItem.ItemStatus == 1? "":"disabled" ]), lend_path+"/new/"+anItem.id.to_s
+      %td
+        .btn-group
+          = link_to button_tag("編輯", :class => "btn btn-success edit-btn"), :action => "modify_item", :id => anItem.id
+          = link_to button_tag("刪除", :class => "btn btn-danger del-btn"), :action => "delete_item", :id => anItem.id
