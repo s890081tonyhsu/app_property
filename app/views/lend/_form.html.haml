@@ -1,0 +1,67 @@
+- @errorStatus = ['','has-success', 'has-error']
+- @errorDetail = {:LendName => {:status => 0, :message => ''}, :LendEmail => {:status => 0, :message => ''}, :LendUnit => {:status => 0, :message => ''}, :ItemId => {:status => 0, :message => ''}, :PassTime => {:status => 0, :message => ''}}
+- itemStatus = ["未開放借用","可以借用"]
+- statusClass = ["btn-warning", "btn-success"]
+- @errorDetail.each do |key, detail|
+  - if @lendData.errors[key].any?
+    - detail[:status] = 2 * @lendError
+    - @lendData.errors[key].each do |message|
+      - detail[:message] << message + ' '
+  - else
+    - detail[:status] = 1 * @lendError
+
+
+
+.form-horizontal.container{:role => "form"}
+  = form_for @lendData, :url => { :action => yield(:action) } do |form|
+    // Lend's name.
+    .form-group{:class => @errorStatus[@errorDetail[:LendName][:status].to_i]}
+      = label(:lendNew, :LendName, "借用人姓名", class: "col-sm-2 control-label")
+      .col-sm-2
+        = form.text_field :LendName, class: 'form-control'
+      - if @errorDetail[:LendName][:status] == 2
+        .col-sm-4.has-error.col-sm-offset-2
+          = label(:lendNew, :LendName, @errorDetail[:LendName][:message], class: "control-label")
+
+    // Lend's email
+    .form-group{:class => @errorStatus[@errorDetail[:LendEmail][:status].to_i]}
+      = label(:lendNew, :LendEmail, "借用人電子郵件", class: "col-sm-2 control-label")
+      .col-sm-4
+        = form.text_field :LendEmail, class: 'form-control'
+      - if @errorDetail[:LendEmail][:status] == 2
+        .col-sm-4.has-error
+          = label(:lendNew, :LendEmail, @errorDetail[:LendEmail][:message], class: "control-label")
+
+    // Lend's unit
+    .form-group{:class => @errorStatus[@errorDetail[:LendUnit][:status].to_i]}
+      = label(:lendNew, :LendUnit, "借用單位", class: "col-sm-2 control-label")
+      .col-sm-2
+        = form.text_field :LendUnit, class: 'form-control'
+      - if @errorDetail[:LendUnit][:status] == 2
+        .col-sm-4.has-error.col-sm-offset-2
+          = label(:lendNew, :LendName, @errorDetail[:LendUnit][:message], class: "control-label")
+
+    // Lend's item
+    .form-group{:class => @errorStatus[@errorDetail[:ItemId][:status].to_i]}
+      = label(:lendNew, :ItemId, "借用物品", class: "col-sm-2 control-label")
+      #itemSelect.col-sm-2
+        = form.select :ItemId, Item.all.collect {|p| [ p.ItemName, p.id,{:"data-deadline" => p.ItemDeadline} ] }, { include_blank: true }, class: "selectpicker form-control", :"data-live-search" => "true", :onchange => "ItemDeadline()"
+      #date_notice.col-sm-2.text-warning.control-label{:style =>"display:none;"}
+        注意：此物品可供借用
+        %span
+        天
+      - if @errorDetail[:ItemId][:status] == 2
+        .col-sm-4.has-error.col-sm-offset-2
+          = label(:lendNew, :ItemId, @errorDetail[:ItemId][:message], class: "control-label")
+
+    // Lend's passTime
+    .form-group{:class => @errorStatus[@errorDetail[:PassTime][:status].to_i]}
+      = label(:lendNew, :PassTime, "預定借用日期", class: "col-sm-2 control-label")
+      .col-sm-2
+        = form.date_field :PassTime, class: 'form-control'
+      - if @errorDetail[:PassTime][:status] == 2
+        .col-sm-4.has-error.col-sm-offset-2
+          = label(:lendNew, :PassTime, @errorDetail[:PassTime][:message], class: "control-label")
+    .form-group
+      .col-sm-offset-2.col-sm-8
+        = submit_tag 'Save', class: 'form-control'

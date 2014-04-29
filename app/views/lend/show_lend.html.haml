@@ -1,25 +1,26 @@
 - lendStatus = ["不予准許","正在借用","審核中","違規過期"]
 - statusClass = ["btn-danger", "btn-success", "btn-warning", "btn-danger"]
 
-%p 以下為該筆資料之詳細借用狀況
-
-%strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 借用者姓名
-%p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}= @lendData.LendName
-%strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 借用單位
-%p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}= @lendData.LendUnit
-%strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 借用物品
-%p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}
-  - if Item.where(:id => @lendData.ItemId).blank?
-    = content_tag("該物品已被刪除")
-  - else
-    = link_to Item.find(@lendData.ItemId).ItemName, item_path+"/"+@itemData.find(@lendData.ItemId).id.to_s
-%strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 借用時間
-%p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}
-  = @lendData.PassTime
-  %span 至
-  = @lendData.DeadTime
-%strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 批准狀態
-%p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}
-  %button{:class => ["btn", statusClass[@lendData.ItemLendStatus]]}= lendStatus[@lendData.ItemLendStatus]
-.col-md-12.text-center
-  = link_to button_tag('回到借閱列表', :class => "btn btn-primary"), lend_path+'/view', class: 'text-center'
+.col-md-12.alert.alert-info
+  %p 以下為該筆資料之詳細借用狀況
+.container
+  %strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 借用者姓名
+  %p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}= @lendData.LendName
+  %strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 借用單位
+  %p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}= @lendData.LendUnit
+  %strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 借用物品
+  %p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}
+    - if Item.where(:id => @lendData.ItemId).blank?
+      = content_tag("該物品已被刪除")
+    - else
+      = link_to Item.find(@lendData.ItemId).ItemName, item_path+"/"+@itemData.find(@lendData.ItemId).id.to_s
+  %strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 借用時間
+  %p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}
+    = @lendData.PassTime
+    %span 至
+    = @lendData.DeadTime
+  %strong{:class => "col-md-4 text-center", :style => "padding-top:10px;"} 批准狀態
+  %p{:class => "col-md-8 text-center", :style => "padding-top:10px;"}
+    %button{:class => ["btn", statusClass[@lendData.ItemLendStatus]]}= lendStatus[@lendData.ItemLendStatus]
+  .col-md-12.text-center
+    = link_to button_tag('回到借閱列表', :class => "btn btn-primary"), lend_path+'/view', class: 'text-center'

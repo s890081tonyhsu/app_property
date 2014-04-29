@@ -22,7 +22,8 @@ class LendController < ApplicationController
 	@itemData = Item
   end
 
-  def new_lend 
+  def new_lend
+    @lendError = 0 
     @lendData = Lend.new
     if params.has_key?(:id)
       @lendData.ItemId = params[:id]
@@ -41,6 +42,7 @@ class LendController < ApplicationController
   	  flash.now[:notice] = "儲存成功"
 	rescue
       if @lendData.save == false
+        @lendError = 1
   	    render 'new_lend'
         flash.now[:error] = "儲存失敗"
       end
@@ -53,8 +55,9 @@ class LendController < ApplicationController
       case token
         when 0
           flash.now[:notice] = "資料載入成功"
+		  @lendError = 0
 		  if @lendData.ItemLendStatus % 2 != 0
-   	        flash.now[:info] = "請注意，非審核或是回絕之申請無法進行修改"
+   	        flash.now[:warning] = "請注意，非審核或是回絕之申請無法進行修改"
 		  end
         when 1
       	redirect_to lend_verify_path
@@ -88,7 +91,7 @@ class LendController < ApplicationController
    	        flash.now[:notice] = "儲存成功"
           else
             render 'show_lend'
-   	        flash.now[:warning] = "抱歉，非審核或是回絕之申請無法進行修改"
+   	        flash.now[:error] = "抱歉，非審核或是回絕之申請無法進行修改"
 		  end
    	    when 1
    	  	redirect_to lend_verify_path
@@ -102,7 +105,8 @@ class LendController < ApplicationController
    	  end
 	rescue
 	  if @lendData.save == false
-	    render 'new_lend'
+	    @lendError = 1
+        render 'new_lend'
         flash.now[:error] = "儲存失敗"
       end
     end
@@ -147,8 +151,8 @@ class LendController < ApplicationController
 	if cookies[:verify]
       @msg = {:data => "目前憑證存在，如果看不到借閱資料請重新輸入表單取得", :note => "alert alert-warning"}
 	elsif @lendData.blank? == false
-      cookies[:verify] = {:value => Digest::SHA2.hexdigest(@name + @email), :expires => Time.now + 60}
-	  @msg = {:data => "已建立憑證，編輯與刪除需透過此憑證", :note => "alert alert-success"}
+      cookies[:verify] = {:value => Digest::SHA2.hexdigest(@name + @email), :expires => Time.now + 3600}
+	  @msg = {:data => "已建立一小時暫時憑證，編輯與刪除需透過此憑證", :note => "alert alert-success"}
 	else
       @msg = {:data => "請輸入資料以便取得修改資料之憑證", :note => "alert alert-warning"}
 	end
