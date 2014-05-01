@@ -1,0 +1,16 @@
+- authLabel = {'' => '', 'basic' => {:label => '伊爾特授權用戶', :class => 'btn-default'}, 'student' => {:label => '興大學生', :class => 'btn-success'}}
+
+.alert.alert-info
+  你已經成功藉由伊爾特系統登入，以下是你可以在本系統的資訊與可使用的功能
+.container
+  .col-md-12
+    %h3 使用者資訊
+    %p 使用者名稱：#{session[:user]['info']['username']}
+    %p 使用者電子郵件：#{session[:user]['info']['email']}
+    %p 目前權限：
+    .btn-group.col-md-offset-1
+      - session[:user]['login'].to_a.each do|auth|
+        - if auth[1] == 'true'
+          .btn{:class => authLabel[auth[0]][:class]}= authLabel[auth[0]][:label]
+  %hr
+  .col-md-12

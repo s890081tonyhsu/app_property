@@ -2,6 +2,11 @@ AppProperty::Application.routes.draw do
   root to: 'main#index'
   get 'about' => 'main#about'
   get 'introduction' => 'main#introduction'
+  
+  # Ilt Authorization
+  get 'ilt/auth' => 'main#auth'
+  get 'ilt/signin' => 'main#session_create'
+  get 'ilt/signout' => 'main#session_destroy'
 
   # Item CRUD
   get "item" => "item#view_item"

@@ -7,6 +7,8 @@
 
 - tabList = {"" => [{:name => "關於此系統", :link => 'about'},{:name => "使用方法", :link => 'introduction'},{:name => "物品清單頁面", :link => 'item'},{:name => "借閱清單頁面", :link => 'lend'}], "item" => [{:name => "新增物品", :link => "/new"},{:name => "管理物品", :link => "/manage"},{:name => "使用方法", :link => '/../introduction#item-overview'}],"lend" => [{:name => "新增借閱", :link => "/new"},{:name => "管理借閱", :link => "/verify"},{:name => "審核借閱", :link => "/audit"},{:name => "使用方法", :link => '/../introduction#lend-overview'}]}
 
+- userMode = {'unauth' => {:label => '一般使用者', :link => ilt_signout_path},'authed' => {:label => '管理員模式', :link => ilt_signin_path}}
+
 - navName = ''
 - tabTitle.each do|subName|
   - if request.original_url.include? subName[:name]
@@ -35,6 +37,13 @@
                 %li{:class => request.original_url.include?(list[:link])? 'active':''}
                   = link_to list[:name], subName[:path] + list[:link]
             %ul.nav.navbar-nav.navbar-right
+              %li.dropdown
+                - modeAuth = session[:user].blank?? 'unauth':'authed'
+                = link_to userMode[modeAuth][:label], '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', role: 'button'
+                %ul.dropdown-menu{:role => "menu", "aria-labelledby" => "dLabel"}
+                  - userMode.to_a.each do|mode|
+                    %li{:class => modeAuth == mode[0]? 'active':''}
+                      = link_to mode[1][:label], mode[1][:link]
               - if navName != ''
                 %li
                   = link_to '回到主頁', root_path

@@ -19,8 +19,6 @@ gem 'simple_form'
 gem 'mysql2'
 gem 'font-awesome-sass'
 gem 'tzinfo-data'
-gem 'devise'
-gem 'omniauth'
 gem 'json'
 group :development do
   gem 'better_errors'

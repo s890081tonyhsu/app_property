@@ -8,3 +8,5 @@ MAILCHIMP_API_KEY: Your_MailChimp_API_Key
 MAILCHIMP_LIST_ID: Your_List_ID
 DOMAIN_NAME: example.com
 OWNER_EMAIL: me@example.com
+ILT_KEY: Your_ILT_KEY
+ILT_SECRET: Your_ILT_SECRET
