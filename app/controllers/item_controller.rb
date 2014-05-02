@@ -1,4 +1,6 @@
 class ItemController < ApplicationController
+  before_filter :ilt_session, :except => [:view_item, :show_item]
+
   def view_item
     @itemData = Item.all
   end

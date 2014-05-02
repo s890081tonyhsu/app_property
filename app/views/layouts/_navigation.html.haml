@@ -5,9 +5,11 @@
 
 - tabTitle = [{:name => "", :path => root_path, :title => "系統首頁"}, {:name => "item", :path => item_path, :title => "物品清單頁面"}, {:name => "lend",:path => lend_path, :title => "借閱清單頁面"}]
 
-- tabList = {"" => [{:name => "關於此系統", :link => 'about'},{:name => "使用方法", :link => 'introduction'},{:name => "物品清單頁面", :link => 'item'},{:name => "借閱清單頁面", :link => 'lend'}], "item" => [{:name => "新增物品", :link => "/new"},{:name => "管理物品", :link => "/manage"},{:name => "使用方法", :link => '/../introduction#item-overview'}],"lend" => [{:name => "新增借閱", :link => "/new"},{:name => "管理借閱", :link => "/verify"},{:name => "審核借閱", :link => "/audit"},{:name => "使用方法", :link => '/../introduction#lend-overview'}]}
+- tabList = {"" => [{:name => "關於此系統", :link => 'about', :bind => false},{:name => "使用方法", :link => 'introduction', :bind => false},{:name => "物品清單頁面", :link => 'item', :bind => false},{:name => "借閱清單頁面", :link => 'lend', :bind => false}], "item" => [{:name => "新增物品", :link => "/new", :bind => true},{:name => "管理物品", :link => "/manage", :bind => true},{:name => "使用方法", :link => '/../introduction#item-overview', :bind => false}],"lend" => [{:name => "新增借閱", :link => "/new", :bind => false},{:name => "管理借閱", :link => "/verify", :bind => false},{:name => "審核借閱", :link => "/audit", :bind => true},{:name => "使用方法", :link => '/../introduction#lend-overview', :bind => false}]}
 
 - userMode = {'unauth' => {:label => '一般使用者', :link => ilt_signout_path},'authed' => {:label => '管理員模式', :link => ilt_signin_path}}
+
+- userStatus = session[:user].blank?? 'unauth':'authed'
 
 - navName = ''
 - tabTitle.each do|subName|
@@ -34,15 +36,15 @@
           #property-subnav.collapse.navbar-collapse.top-nav
             %ul.nav.navbar-nav
               - tabList[subName[:name]].each do|list|
-                %li{:class => request.original_url.include?(list[:link])? 'active':''}
-                  = link_to list[:name], subName[:path] + list[:link]
+                - unless userStatus == 'unauth' && list[:bind]
+                  %li{:class => request.original_url.include?(list[:link])? 'active':''}
+                    = link_to list[:name], subName[:path] + list[:link]
             %ul.nav.navbar-nav.navbar-right
               %li.dropdown
-                - modeAuth = session[:user].blank?? 'unauth':'authed'
-                = link_to userMode[modeAuth][:label], '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', role: 'button'
+                = link_to userMode[userStatus][:label], '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', role: 'button'
                 %ul.dropdown-menu{:role => "menu", "aria-labelledby" => "dLabel"}
                   - userMode.to_a.each do|mode|
-                    %li{:class => modeAuth == mode[0]? 'active':''}
+                    %li{:class => userStatus == mode[0]? 'active':''}
                       = link_to mode[1][:label], mode[1][:link]
               - if navName != ''
                 %li

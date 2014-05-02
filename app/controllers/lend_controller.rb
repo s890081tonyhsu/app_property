@@ -1,6 +1,7 @@
 require 'date'
 require 'digest/sha2'
 class LendController < ApplicationController
+  before_filter :ilt_session, :only => [:audit]
   def view_lend
     @lendData = Lend.all
 	@itemData = Item

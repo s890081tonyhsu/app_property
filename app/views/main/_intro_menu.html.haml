@@ -1,3 +1,5 @@
+- userStatus = session[:user].blank?? 'unauth':'authed'
+
 .pm-docs-sidebar.hidden-print.affix-top
   %ul.nav.pm-docs-sidenav
     %li
@@ -14,10 +16,11 @@
       %ul.nav
         %li
           = link_to '查看物品資訊', '#item-show'
-        %li
-          = link_to '新增借用物品(限管理員)', '#item-new'
-        %li
-          = link_to '管理借用物品(限管理員)', '#item-manage'
+        - if userStatus == 'authed'
+          %li
+            = link_to '新增借用物品(限管理員)', '#item-new'
+          %li
+            = link_to '管理借用物品(限管理員)', '#item-manage'
     %li
       = link_to '借用管理頁面', '#lend-overview'
       %ul.nav
@@ -27,5 +30,6 @@
           = link_to '申請一次借用', '#lend-new'
         %li
           = link_to '管理個人借用', '#lend-manage'
-        %li
-          = link_to '審核借用清單(限管理員)', '#lend-audit'
+        - if userStatus == 'authed'
+          %li
+            = link_to '審核借用清單(限管理員)', '#lend-audit'
