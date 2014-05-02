@@ -51,7 +51,7 @@ class LendController < ApplicationController
   def modify_lend
     begin
       @lendData = Lend.find(params[:id])
-      token = certification(cookies[:verify], @lendData)
+      token = certification(session[:verify], @lendData)
       case token
         when 0
           flash.now[:notice] = "資料載入成功"
@@ -79,7 +79,7 @@ class LendController < ApplicationController
    	  @itemData = Item 
    	  @lendId = params[:id]
    	  @lendData = Lend.find(params[:id])
-   	  token = certification(cookies[:verify], @lendData)
+   	  token = certification(session[:verify], @lendData)
    	  case token
    	    when 0
    	      @itemId = @lendData.ItemId
@@ -115,7 +115,7 @@ class LendController < ApplicationController
   def delete_lend
     begin
       @lendData = Lend.find(params[:id])
-      token = certification(cookies[:verify], @lendData)
+      token = certification(session[:verify], @lendData)
 	  case token
 	    when 0
           redirect_to lend_verify_path(:name => @lendData[:LendName], :email => @lendData[:LendEmail]) 
@@ -140,22 +140,27 @@ class LendController < ApplicationController
   
   def verify
     @itemData = Item
-    if params.has_key?(:name) && params.has_key?(:email)
-		@name = params[:name]
-		@email = params[:email]
-		@lendData = Lend.where("LendName = ? AND LendEmail = ?", @name, @email)
-    else
-		@name = ""
-		@email = ""
-    end
-	if cookies[:verify]
+    if params.has_key?(:destroy)
+	  session.delete(:verify)
+	  params[:name] = ''
+	  params[:email] = ''
+	  @msg = {:data => "已清除當前憑證", :note => "alert alert-success"}
+	elsif !session[:verify].blank? && session[:verify][:expires] > Time.now
+	  @name = session[:verify][:name]
+	  @email = session[:verify][:email]
       @msg = {:data => "目前憑證存在，如果看不到借閱資料請重新輸入表單取得", :note => "alert alert-warning"}
-	elsif @lendData.blank? == false
-      cookies[:verify] = {:value => Digest::SHA2.hexdigest(@name + @email), :expires => Time.now + 3600}
+	elsif params.has_key?(:name) && params.has_key?(:email)
+	  @name = params[:name]
+	  @email = params[:email]
+	  session[:verify] = {:name => @name, :email => @email, :value => Digest::SHA2.hexdigest(@name + @email), :expires => Time.now + 3600}
 	  @msg = {:data => "已建立一小時暫時憑證，編輯與刪除需透過此憑證", :note => "alert alert-success"}
 	else
+      session.delete(:verify)
+	  @name = ''
+	  @email = ''
       @msg = {:data => "請輸入資料以便取得修改資料之憑證", :note => "alert alert-warning"}
 	end
+	@lendData = Lend.where("LendName = ? AND LendEmail = ?", @name, @email)
   end
  
   def audit
@@ -207,7 +212,8 @@ class LendController < ApplicationController
   def lend_params
     params.require(:lend).permit(:LendName, :LendEmail, :LendUnit, :ItemId, :ItemLendStatus, :PassTime)
   end
-  def certification(key, data)
+  def certification(storage, data)
+    key = storage[:value]
     token = 3
     begin
       if key == Digest::SHA2.hexdigest(data[:LendName] + data[:LendEmail])
