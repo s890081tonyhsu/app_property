@@ -7,7 +7,7 @@
 
 - tabList = {"" => [{:name => "關於此系統", :link => 'about', :bind => false},{:name => "使用方法", :link => 'introduction', :bind => false},{:name => "物品清單頁面", :link => 'item', :bind => false},{:name => "借閱清單頁面", :link => 'lend', :bind => false}], "item" => [{:name => "新增物品", :link => "/new", :bind => true},{:name => "管理物品", :link => "/manage", :bind => true},{:name => "使用方法", :link => '/../introduction#item-overview', :bind => false}],"lend" => [{:name => "新增借閱", :link => "/new", :bind => false},{:name => "管理借閱", :link => "/verify", :bind => false},{:name => "審核借閱", :link => "/audit", :bind => true},{:name => "使用方法", :link => '/../introduction#lend-overview', :bind => false}]}
 
-- userMode = {'unauth' => {:label => '一般使用者', :link => ilt_signout_path},'authed' => {:label => '管理員模式', :link => ilt_signin_path}}
+- userMode = {'unauth' => {:label => '一般使用者', :link => ilt_signout_path(:back_url => request.original_url)},'authed' => {:label => '管理員模式', :link => ilt_signin_path(:back_url => request.original_url)}}
 
 - userStatus = session[:user].blank?? 'unauth':'authed'
 
@@ -45,7 +45,7 @@
                 %ul.dropdown-menu{:role => "menu", "aria-labelledby" => "dLabel"}
                   - userMode.to_a.each do|mode|
                     %li{:class => userStatus == mode[0]? 'active':''}
-                      = link_to mode[1][:label], mode[1][:link]
+                      = link_to mode[1][:label], mode[1][:link] 
               - if navName != ''
                 %li
                   = link_to '回到主頁', root_path

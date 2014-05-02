@@ -24,16 +24,23 @@ class MainController < ApplicationController
 	end
   end
   def session_create
+    session[:back_url] = session[:back_url].blank?? params['back_url'] : session[:back_url]
+    @back_url = session[:back_url]
     if !cookies[:user_name].blank?
+      session.delete(:back_url)
       nil
     elsif session[:data].blank?
       redirect_to ilt_auth_path
 	else
 	  session[:user] = session[:data]
 	  session.delete(:data)
+	  session.delete(:back_url)
 	end
   end
   def session_destroy
+    session[:back_url] = params['back_url']
     session.delete(:user)
+	@back_url = session[:back_url]
+	session.delete(:back_url)
   end
 end

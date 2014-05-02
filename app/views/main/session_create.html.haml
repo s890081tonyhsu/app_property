@@ -14,3 +14,7 @@
           .btn{:class => authLabel[auth[0]][:class]}= authLabel[auth[0]][:label]
   %hr
   .col-md-12
+    %h3 可使用的功能
+
+  .col-md-4.col-md-offset-4.text-center
+    = link_to '返回當前功能', @back_url, class: 'btn btn-primary'
