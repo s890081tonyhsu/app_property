@@ -21,8 +21,10 @@
       .col-sm-8
         = text_field_tag 'email', nil, class: 'form-control'
     .form-group
-      .col-sm-offset-4.col-sm-4
+      .col-sm-6.text-center
         = submit_tag '取得憑證', class: 'form-control btn btn-info'
+      .col-sm-6.text-center
+        = submit_tag '取消當前憑證', :name => 'destroy["true"]', class: 'form-control btn btn-warning'
 
 %br
 
