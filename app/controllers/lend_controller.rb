@@ -4,16 +4,19 @@ class LendController < ApplicationController
   def view_lend
     @lendData = Lend.all
 	@itemData = Item
-	begin
-	  @LendExpire = Lend.find(:all, :conditions => ["DeadTime <= ?", Date.yesterday.iso8601])
-	  @LendExpire.each do |expireData|
-	    if expireData.ItemLendStatus == 1
-          expireData.ItemLendStatus = 3
-          expireData.save
-	    end
+	@lendStart = lendStart
+	@lendStart.each do |startData|
+	  if startData.ItemLendStatus == 1
+        startData.ItemLendStatus = 4
+        startData.save
 	  end
-	rescue
-      nil
+	end
+	@lendExpire = lendExpire
+	@lendExpire.each do |expireData|
+	  if expireData.ItemLendStatus == 4
+        expireData.ItemLendStatus = 3
+        expireData.save
+	  end
 	end
   end
   def show_lend
@@ -36,10 +39,14 @@ class LendController < ApplicationController
       @itemId = @lendData.ItemId
       @itemTime = Item.find(@itemId).ItemDeadline
       @lendData.DeadTime = (@lendData.PassTime.to_date + @itemTime).iso8601
-      @lendData.ItemLendStatus = 2
-      @lendData.save
-      render 'show_lend'
-  	  flash.now[:notice] = "儲存成功"
+	  unless lendBind('', @itemId, @lendData.PassTime, @lendData.DeadTime).blank?
+        flash.now[:error] = "該物品在當期間已有人預約"
+	  else
+        @lendData.ItemLendStatus = 2
+        @lendData.save
+        render 'show_lend'
+  	    flash.now[:notice] = "儲存成功"
+      end
 	rescue
       if @lendData.save == false
         @lendError = 1
@@ -89,7 +96,10 @@ class LendController < ApplicationController
    	        @lendData.save
    	        render 'show_lend'
    	        flash.now[:notice] = "儲存成功"
-          else
+		  elsif !lendBind(@lendId, @itemId, @lendData.PassTime, @lendData.DeadTime).blank?
+            render 'modify_lend'
+		    flash.now[:error] = "該物品在當期間已有人預約"
+		  else
             render 'show_lend'
    	        flash.now[:error] = "抱歉，非審核或是回絕之申請無法進行修改"
 		  end
@@ -106,7 +116,7 @@ class LendController < ApplicationController
 	rescue
 	  if @lendData.save == false
 	    @lendError = 1
-        render 'new_lend'
+        render 'modify_lend'
         flash.now[:error] = "儲存失敗"
       end
     end
@@ -209,6 +219,8 @@ class LendController < ApplicationController
     @lendData = Lend.where("ItemLendStatus <= ?",2).order(:ItemLendStatus)
   end
 
+  private
+
   def lend_params
     params.require(:lend).permit(:LendName, :LendEmail, :LendUnit, :ItemId, :ItemLendStatus, :PassTime)
   end
@@ -225,5 +237,15 @@ class LendController < ApplicationController
 	  token = 2
 	end
 	token
+  end
+  def lendStart
+    Lend.where('PassTime <= ?', Date.today.iso8601)
+  end
+  def lendExpire
+    Lend.where('DeadTime <= ?', Date.yesterday.iso8601)
+  end
+  def lendBind(id, item, start, stop)
+    @lendScope = Lend.where(ItemId: item, PassTime: (start..stop),  DeadTime: (start..stop)).where.not(id: id)
+	@lendScope
   end
 end
