@@ -22,4 +22,6 @@ root.ItemDeadline = () ->
   if attr
     $('#date_notice').fadeIn()
     $('#date_notice span').text(attr)
+    $('#slideContainer input').attr('max', attr)
+
 

@@ -10,8 +10,6 @@
   - else
     - detail[:status] = 1 * @lendError
 
-
-
 .form-horizontal.container{:role => "form"}
   = form_for @lendData, :url => { :action => yield(:action) } do |form|
     // Lend's name.
@@ -45,9 +43,9 @@
     .form-group{:class => @errorStatus[@errorDetail[:ItemId][:status].to_i]}
       = label(:lendNew, :ItemId, "借用物品", class: "col-sm-2 control-label")
       #itemSelect.col-sm-2
-        = form.select :ItemId, Item.all.collect {|p| [ p.ItemName, p.id,{:"data-deadline" => p.ItemDeadline} ] }, { include_blank: true }, class: "selectpicker form-control", :"data-live-search" => "true", :onchange => "ItemDeadline()"
+        = form.select :ItemId, Item.all.collect {|p| [ p.ItemName, p.id,{:'data-id' => p.id, :"data-deadline" => p.ItemDeadline} ] }, { include_blank: true }, class: "selectpicker form-control", :"data-live-search" => "true", :onchange => "ItemDeadline()"
       #date_notice.col-sm-2.text-warning.control-label{:style =>"display:none;"}
-        注意：此物品可供借用
+        可供借用
         %span
         天
       - if @errorDetail[:ItemId][:status] == 2
@@ -57,11 +55,17 @@
     // Lend's passTime
     .form-group{:class => @errorStatus[@errorDetail[:PassTime][:status].to_i]}
       = label(:lendNew, :PassTime, "預定借用日期", class: "col-sm-2 control-label")
-      .col-sm-2
+      #datepick.col-sm-2{:'data-date-format' => 'YYYY-MM-DD'}
         = form.date_field :PassTime, class: 'form-control'
+        %span.input-group-addon
+          %span.glyphicon.glyphicon-date
       - if @errorDetail[:PassTime][:status] == 2
         .col-sm-4.has-error.col-sm-offset-2
           = label(:lendNew, :PassTime, @errorDetail[:PassTime][:message], class: "control-label")
+    .form-group
+      = label(:lendNew, :lendRange, "借用天數", class: "col-sm-2 control-label")
+      #slideContainer.col-sm-2.control-label
+        = range_field_tag(:lendDay, @lendDay, :'min' => 1, :'max' => @lendRange)
     .form-group
       .col-sm-offset-2.col-sm-8
         = submit_tag 'Save', class: 'form-control'

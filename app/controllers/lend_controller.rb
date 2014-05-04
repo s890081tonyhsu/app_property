@@ -22,23 +22,37 @@ class LendController < ApplicationController
   def show_lend
     @lendId = params[:id]
 	@lendData = Lend.find(@lendId)
+	if @lendData.PassTime <= Date.today.iso8601 && @lendData.ItemLendStatus == 1
+      @lendData.ItemLendStatus = 4
+    end
+    if @lendData.DeadTime <= Date.yestoday.iso8601
+      @lendData.ItemLendStatus == 1
+    end	
 	@itemData = Item
   end
 
   def new_lend
     @lendError = 0 
     @lendData = Lend.new
+	@lendRange = 2
+	@lendDay = 1
     if params.has_key?(:id)
-      @lendData.ItemId = params[:id]
+      @itemId = params[:id]
+      @itemData = Item.find(@itemId)
+      @lendData.ItemId = @itemId
+	  @lendRange = @itemData.ItemDeadline
 	end
   end
   def create_lend
     @itemData = Item
     @lendData = Lend.new(lend_params)
+	@lendDay = params['lendDay'] || 1
+	@lendRange = 2
     begin
       @itemId = @lendData.ItemId
       @itemTime = Item.find(@itemId).ItemDeadline
-      @lendData.DeadTime = (@lendData.PassTime.to_date + @itemTime).iso8601
+	  @lendRange = @itemTime
+      @lendData.DeadTime = (@lendData.PassTime.to_date + @lendDay).iso8601
 	  unless lendBind('', @itemId, @lendData.PassTime, @lendData.DeadTime).blank?
         flash.now[:error] = "該物品在當期間已有人預約"
 	  else
@@ -63,6 +77,10 @@ class LendController < ApplicationController
         when 0
           flash.now[:notice] = "資料載入成功"
 		  @lendError = 0
+          @itemId = @lendData.ItemId
+          @itemData = Item.find(@itemId)
+		  @lendDay = (@lendData.DeadTime.to_date - @lendData.PassTime.to_date).to_i
+		  @lendRange = @itemData.ItemDeadline
 		  if @lendData.ItemLendStatus % 2 != 0
    	        flash.now[:warning] = "請注意，非審核或是回絕之申請無法進行修改"
 		  end
@@ -83,6 +101,8 @@ class LendController < ApplicationController
   end
   def update_lend
     begin
+      @lendDay = params['lendDay'] || 1
+	  @lendRange = 2
    	  @itemData = Item 
    	  @lendId = params[:id]
    	  @lendData = Lend.find(params[:id])
@@ -91,7 +111,8 @@ class LendController < ApplicationController
    	    when 0
    	      @itemId = @lendData.ItemId
    	      @itemTime = Item.find(@itemId).ItemDeadline
-   	      @lendData.DeadTime = (@lendData.PassTime.to_date + @itemTime).iso8601
+		  @lendRange = @itemTime
+   	      @lendData.DeadTime = (@lendData.PassTime.to_date + @lendDay).iso8601
    	      if @lendData.ItemLendStatus % 2 == 0
    	        @lendData.save
    	        render 'show_lend'
