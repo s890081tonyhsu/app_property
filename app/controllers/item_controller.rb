@@ -1,25 +1,46 @@
 class ItemController < ApplicationController
+
   def view_item
     @itemData = Item.all
+    @itemData.each do |eachitem|
+      @lendscope = lendBind(@itemId, @lendData.PassTime, @lendData.DeadTime)
+      @itemStatus = eachitem.ItemLendStatus
+      if eachitem.LastLendId != @lendscope.id && @itemStatus != 1
+        eachitem.LastLendId = @lendscope.id
+        eachitem.save
+      elsif !@lendscope && @itemStatus == 3
+        eachitem.LastLendId = 0
+        eachitem.ItemLendStatus == 2
+        eachitem.save
+      else
+        nil
+      end
   end
+  def show_item
+    @itemId = params[:id]
+    @itemData = Item.find(@itemId)
+  end
+  def manage_item
+    @itemData = Item.all
+  end
+
   def new_item
-	@itemError = 0
+    @itemError = 0
     @itemData = Item.new
   end
   def create_item
     @itemData = Item.new(item_params)
     if @itemData.save 
-	  flash.now[:notice] = "儲存成功"
-	  render 'show_item'
+      flash.now[:notice] = "儲存成功"
+      render 'show_item'
     else
-	  @itemError = 1
+      @itemError = 1
       flash.now[:error] = "儲存失敗"
-	  render 'new_item'
-    end	  
+      render 'new_item'
+    end
   end
 
   def modify_item
-    @itemError = 0
     @itemId = params[:id]
     @itemData = Item.find(@itemId)
   end
@@ -27,31 +48,28 @@ class ItemController < ApplicationController
     @itemId = params[:id]
     @itemData = Item.find(@itemId)
     if @itemData.update_attributes(item_params)
-	  flash.now[:success] = "儲存成功"
-	  render 'show_item'
+      flash.now[:success] = "儲存成功"
+      render 'show_item'
     else
       @itemError = 1
       flash.now[:error] = "儲存失敗"
-	  render 'modify_item'
+      render 'modify_item'
     end
   end
 
   def delete_item
     @itemData = Item.find(params[:id])
-	@itemData.destroy
-	redirect_to :action => 'view_item'
-  end
-  
-  def show_item
-    @itemId = params[:id]
-    @itemData = Item.find(@itemId)
+    @itemData.destroy
+    redirect_to :action => 'view_item'
   end
 
-  def manage_item
-    @itemData = Item.all
-  end
+  private
 
   def item_params
     params.require(:item).permit(:ItemName, :ItemNum, :ItemHeavy, :ItemStatus, :ItemDescription, :ItemDeadline)
+  end
+  def lendBind(item)
+    @lendScope = Lend.where(ItemId: item, ['PassTime < ?', Date.today], ['DeadDate > ?', Date.today])
+    @lendScope
   end
 end
