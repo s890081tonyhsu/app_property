@@ -55,13 +55,14 @@
     // Lend's passTime
     .form-group{:class => @errorStatus[@errorDetail[:PassTime][:status].to_i]}
       = label(:lendNew, :PassTime, "預定借用日期", class: "col-sm-2 control-label")
-      #datepick.col-sm-2{:'data-date-format' => 'YYYY-MM-DD'}
-        = form.date_field :PassTime, class: 'form-control'
-        %span.input-group-addon
-          %span.glyphicon.glyphicon-date
-      - if @errorDetail[:PassTime][:status] == 2
-        .col-sm-4.has-error.col-sm-offset-2
-          = label(:lendNew, :PassTime, @errorDetail[:PassTime][:message], class: "control-label")
+      .col-sm-2
+        #datepick.input-group.date{:'data-date-format' => 'YYYY-MM-DD'}
+          = form.text_field :PassTime, class: 'form-control'
+          %span.input-group-addon
+            %span.glyphicon.glyphicon-th
+        - if @errorDetail[:PassTime][:status] == 2
+          .col-sm-4.has-error.col-sm-offset-2
+            = label(:lendNew, :PassTime, @errorDetail[:PassTime][:message], class: "control-label")
     .form-group
       = label(:lendNew, :lendRange, "借用天數", class: "col-sm-2 control-label")
       #slideContainer.col-sm-2.control-label

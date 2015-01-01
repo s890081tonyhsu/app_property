@@ -3,22 +3,32 @@ class ItemController < ApplicationController
   def view_item
     @itemData = Item.all
     @itemData.each do |eachitem|
-      @lendscope = lendBind(@itemId, @lendData.PassTime, @lendData.DeadTime)
-      @itemStatus = eachitem.ItemLendStatus
-      if eachitem.LastLendId != @lendscope.id && @itemStatus != 1
-        eachitem.LastLendId = @lendscope.id
+      @lendscope = lendBind(@itemId) || nil
+      @itemStatus = eachitem.ItemStatus
+      if @itemStatus != 1
+        if !@lendscope
+          eachitem.LastLendId = @lendscope.id
+        else
+          eachitem.LastLendId = 0
+        end
+        eachitem.ItemStatus = (eachitem.LastLendId != 0)? 2:1
         eachitem.save
-      elsif !@lendscope && @itemStatus == 3
-        eachitem.LastLendId = 0
-        eachitem.ItemLendStatus == 2
-        eachitem.save
-      else
-        nil
       end
+    end
   end
   def show_item
     @itemId = params[:id]
     @itemData = Item.find(@itemId)
+    @lendscope = lendBind(@itemId) || nil
+    if @itemStatus != 1
+      if !@lendscope
+        @itemData.LastLendId = @lendscope.id
+      else
+        @itemData.LastLendId = 0
+      end
+      @itemData.ItemStatus = (eachitem.LastLendId != 0)? 2:1
+      @itemData.save
+    end
   end
   def manage_item
     @itemData = Item.all
@@ -69,7 +79,8 @@ class ItemController < ApplicationController
     params.require(:item).permit(:ItemName, :ItemNum, :ItemHeavy, :ItemStatus, :ItemDescription, :ItemDeadline)
   end
   def lendBind(item)
-    @lendScope = Lend.where(ItemId: item, ['PassTime < ?', Date.today], ['DeadDate > ?', Date.today])
+    @today = Date.today.iso8601
+    @lendScope = Lend.where("ItemId = ? AND PassTime < ? AND DeadTime > ?", item, @today, @today)
     @lendScope
   end
 end

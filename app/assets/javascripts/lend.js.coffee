@@ -1,6 +1,12 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
+
+date_pick = ->
+  $('#datepick').datepicker
+    format:"yyyy-mm-dd"
+    clearBtn:true
+
 sort_audit = ->
   $('#sort_audit button').click ->
     status = $(this).attr('statusval')
@@ -13,6 +19,7 @@ sort_audit = ->
       $(this).addClass('active')
 
 $(document).ready(sort_audit)
+$(document).ready(date_pick)
 $(document).on('page:load', sort_audit)
 
 root = exports ? this
